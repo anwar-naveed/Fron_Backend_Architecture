@@ -32,6 +32,7 @@ public struct ApiResponseMessages
     public const string RECORD_DELETED_SUCCESSFULLY = "Record deleted successfully.";
     public const string SOMETHING_WENT_WRONG = "Something went wrong.";
     public const string INVALID_USERNAME_PASSWORD = "Invalid username or password.";
+    public const string INVALID_ROLE = "Invalid role.";
     public const string INVALID_RECORD = "Invalid record.";
     public const string USER_LOGIN_SUCCESSFULLY = "User login successfully.";
     public const string RECORD_NOT_FOUND = "Record not found.";

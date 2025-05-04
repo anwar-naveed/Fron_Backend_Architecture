@@ -11,19 +11,19 @@ public class UserRepository : AuthRepository, IUserRepository
     {
     }
 
-    public async Task<User> CreateUserAsync(User entity)
+    public async Task<User> CreateUserAsync(User us, Role role)
     {
-        //var user = 
-        var user =  await _authContext.User.AddAsync(entity);
-        //UserRole userRole = new UserRole()
-        //{
-        //    RoleId = user.Entity.
 
-        //}
+        var entity = new UserRole();
+        entity.User = us;
+        entity.Role = role;
+        entity.ModifiedDate = DateTime.UtcNow;
+
+        var userRole = await _authContext.UserRoles.AddAsync(entity);
 
         await _authContext.SaveChangesAsync();
 
-        return user.Entity;
+        return userRole.Entity.User;
     }
 
     public async Task<User> UpdateUserAsync(User entity)

@@ -2,5 +2,6 @@
 public sealed record UserRegistrationRequestDto(
     string Name,
     string UserName,
-    string Password
+    string Password,
+    long RoleId
 );
