@@ -1,0 +1,6 @@
+@Fron.AdminApi_HostAddress = http://localhost:5172
+
+GET {{Fron.AdminApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
