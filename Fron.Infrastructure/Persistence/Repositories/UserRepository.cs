@@ -45,4 +45,10 @@ public class UserRepository : AuthRepository, IUserRepository
         _authContext.User.Remove(entity);
         await _authContext.SaveChangesAsync();
     }
+
+    public async Task<User?> GetUserAsync(string userName, string password)
+        => await _authContext.User
+        .Where(e => e.Username == userName &&
+        e.Password == password)
+        .FirstOrDefaultAsync();
 }

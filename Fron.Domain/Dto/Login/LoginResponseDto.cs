@@ -9,6 +9,6 @@ public sealed record LoginResponseDto(string GroupId,
     string? Department,
     string[]? MenuRights,
     //IEnumerable<ETTUserPrivilegeResponseDto>? UserRightsDetails,
-    string Exp1,
-    string Exp2,
+    string? Exp1,
+    string? Exp2,
     string Token);

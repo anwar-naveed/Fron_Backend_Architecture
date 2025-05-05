@@ -1,6 +1,8 @@
 ﻿using Fron.Application.Abstractions.Application;
+using Fron.Application.Abstractions.Identity;
 using Fron.Application.Abstractions.Persistence;
 using Fron.Application.Services;
+using Fron.Infrastructure.Identity.Services;
 using Fron.Infrastructure.Persistence.Repositories;
 using Fron.Infrastructure.Utility;
 using Microsoft.Extensions.Configuration;
@@ -14,13 +16,14 @@ public static class DependencyInjection
         services.AddHttpContextAccessor();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IRoleService, RoleService>();
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<ITokenService, TokenService>();
 
         return services;
     }
 
     public static IServiceCollection AddInfrastructureRepositories(this IServiceCollection services, IConfiguration configuration)
     {
-        //services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IAuthRepository, AuthRepository>();
         services.AddScoped<IGenericSQLHelper, GenericSQLHelper>();
         services.AddScoped<IUserRepository, UserRepository>();

@@ -15,13 +15,13 @@ public struct ApiStatusCodes
     public const short RECORD_CANNOT_BE_UPDATED = 109;
 
     // 200 series for success
-    public const short RECORD_SAVED_SUCCESSFULLY = 500;
+    public const short RECORD_SAVED_SUCCESSFULLY = 200;
 
-    public const short USER_LOGIN_SUCCESSFULLY = 501;
-    public const short RECORD_UPDATED_SUCCESSFULLY = 502;
-    public const short RECORD_DELETED_SUCCESSFULLY = 503;
-    public const short RECORD_FETCHED_SUCCESSFULLY = 504;
-    public const short FILE_SAVED_SUCCESSFULLY = 505;
+    public const short USER_LOGIN_SUCCESSFULLY = 201;
+    public const short RECORD_UPDATED_SUCCESSFULLY = 202;
+    public const short RECORD_DELETED_SUCCESSFULLY = 203;
+    public const short RECORD_FETCHED_SUCCESSFULLY = 204;
+    public const short FILE_SAVED_SUCCESSFULLY = 205;
 }
 
 public struct ApiResponseMessages
@@ -71,7 +71,7 @@ public struct MagicNumbers
 {
     public const short OTP_LENGTH = 4;
     public const short OTP_EXPIRY_DAYS = 1;
-    public const short TOKEN_EXPIRY_DAYS = 7;
+    public const short TOKEN_EXPIRY_DAYS = 2;
 }
 
 public struct OtpUseCases

@@ -7,4 +7,5 @@ public interface IUserRepository
     Task DeleteUserAsync(User entity);
     Task<User?> GetByIdAsync(long id);
     Task<User> UpdateUserAsync(User entity);
+    Task<User?> GetUserAsync(string userName, string password);
 }

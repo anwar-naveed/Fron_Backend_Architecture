@@ -16,14 +16,14 @@ public static class DtoToEntityMappingExtensions
         };
     }
 
-    public static User Map(this UserRegistrationRequestDto requestDto)
+    public static User Map(this UserRegistrationRequestDto requestDto, string password)
     {
         if (requestDto == null) { return new User(); }
         else return new User
         {
             Name = requestDto.Name,
             Username = requestDto.UserName,
-            Password = requestDto.Password
+            Password = password
         };
     }
 
