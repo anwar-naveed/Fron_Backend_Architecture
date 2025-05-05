@@ -1,3 +1,4 @@
+using Fron.ApiProjectExtensions.Middlewares;
 using Fron.ApiProjectExtensions.StartupExtensions;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
@@ -33,6 +34,8 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     app.UseSwaggerUI(options =>
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApiV7 v1"));
 }
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 
