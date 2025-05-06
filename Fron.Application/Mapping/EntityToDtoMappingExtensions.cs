@@ -69,4 +69,30 @@ public static class EntityToDtoMappingExtensions
             role.Name!
         );
     }
+
+    public static UpdateRoleResponseDto MapUpdate(this Role role)
+    {
+        if (role == null)
+        {
+            return new UpdateRoleResponseDto(
+                0,
+                "");
+        }
+        else return new UpdateRoleResponseDto(
+            role.Id,
+            role.Name!);
+    }
+
+    public static GetRoleResponseDto MapGet(this Role role)
+    {
+        if (role == null)
+        {
+            return new GetRoleResponseDto(
+                0,
+                "");
+        }
+        else return new GetRoleResponseDto(
+            role.Id,
+            role.Name!);
+    }
 }

@@ -15,8 +15,23 @@ public class RoleController : BaseApiController
         _roleService = roleService;
     }
 
-    [HttpPost("RoleCreate")]
-    [AllowAnonymous]
-    public async Task<IActionResult> CreateRole([FromBody] RoleRegistrationRequestDto requestDto)
+    [HttpPost("Role-Create")]
+    public async Task<IActionResult> CreateRoleAsync([FromBody] RoleRegistrationRequestDto requestDto)
         => Ok(await _roleService.CreateRoleAsync(requestDto));
+
+    [HttpPut("Role-Update")]
+    public async Task<IActionResult> UpdateRoleAsync([FromBody] UpdateRoleRequestDto requestDto)
+        => Ok(await _roleService.UpdateRoleAsync(requestDto));
+
+    [HttpDelete("Role-Delete")]
+    public async Task<IActionResult> DeleteRoleAsync(long Id)
+        => Ok(await _roleService.DeleteRoleAsync(Id));
+
+    [HttpGet("Get-All-Roles")]
+    public async Task<IActionResult> GetAllRolesAsync()
+        => Ok(await _roleService.GetAllRolesAsync());
+
+    [HttpGet("Get-Role")]
+    public async Task<IActionResult> GetRoleByIdAsync(long Id)
+        => Ok(await _roleService.GetRoleByIdAsync(Id));
 }
