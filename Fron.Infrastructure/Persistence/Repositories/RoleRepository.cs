@@ -1,5 +1,6 @@
 ﻿using Fron.Application.Abstractions.Persistence;
 using Fron.Domain.AuthEntities;
+using Fron.Domain.Dto.Role;
 using Fron.Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,5 +37,15 @@ public class RoleRepository : AuthRepository, IRoleRepository
     {
         _authContext.Role.Remove(entity);
         await _authContext.SaveChangesAsync();
+    }
+
+    public async Task<IEnumerable<GetAllRolesResponseDto>> GetAllRolesAsync()
+    {
+        return await _authContext.Role.Select(x => new GetAllRolesResponseDto(
+            x.Id,
+            x.Name
+            ))
+            .AsNoTracking()
+            .ToListAsync();
     }
 }
