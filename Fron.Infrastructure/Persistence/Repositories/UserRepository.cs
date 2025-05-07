@@ -1,5 +1,6 @@
 ﻿using Fron.Application.Abstractions.Persistence;
 using Fron.Domain.AuthEntities;
+using Fron.Domain.Dto.User;
 using Fron.Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +20,7 @@ public class UserRepository : AuthRepository, IUserRepository
         entity.Role = role;
         entity.ModifiedDate = DateTime.UtcNow;
 
-        var userRole = await _authContext.UserRoles.AddAsync(entity);
+        var userRole =  await _authContext.UserRoles.AddAsync(entity);
 
         await _authContext.SaveChangesAsync();
 
@@ -36,7 +37,7 @@ public class UserRepository : AuthRepository, IUserRepository
     public async Task<User?> GetByIdAsync(long id)
     {
         return await _authContext.User
-            .Where(e => e.Id == id)
+            .Where(e => e.Id == id && e.IsActive == true)
             .FirstOrDefaultAsync();
     }
 
@@ -49,6 +50,21 @@ public class UserRepository : AuthRepository, IUserRepository
     public async Task<User?> GetUserAsync(string userName, string password)
         => await _authContext.User
         .Where(e => e.Username == userName &&
-        e.Password == password)
+        e.Password == password && e.IsActive == true)
         .FirstOrDefaultAsync();
+
+    public async Task<IEnumerable<GetAllUsersResponseDto>> GetAllUsersAsync()
+    {
+        return await _authContext.User
+            .Where(x => x.IsActive == true)
+            .Select(x => new GetAllUsersResponseDto(
+                x.Id,
+                x.Name,
+                x.Username,
+                x.IsActive,
+                x.CreatedOn,
+                x.ModifiedOn))
+            .AsNoTracking()
+            .ToListAsync();
+    }
 }

@@ -23,7 +23,10 @@ public static class DtoToEntityMappingExtensions
         {
             Name = requestDto.Name,
             Username = requestDto.UserName,
-            Password = password
+            Password = password,
+            IsActive = true,
+            CreatedOn = DateTime.UtcNow,
+            ModifiedOn = DateTime.UtcNow
         };
     }
 
@@ -32,7 +35,10 @@ public static class DtoToEntityMappingExtensions
         if (requestDto == null) { return new Role(); }
         else return new Role
         {
-            Name = requestDto.Name
+            Name = requestDto.Name,
+            IsActive = true,
+            CreatedOn = DateTime.UtcNow,
+            ModifiedOn = DateTime.UtcNow
         };
     }
 }

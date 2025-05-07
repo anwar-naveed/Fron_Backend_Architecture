@@ -1,4 +1,5 @@
 ﻿using Fron.Domain.AuthEntities;
+using Fron.Domain.Dto.User;
 
 namespace Fron.Application.Abstractions.Persistence;
 public interface IUserRepository
@@ -8,4 +9,5 @@ public interface IUserRepository
     Task<User?> GetByIdAsync(long id);
     Task<User> UpdateUserAsync(User entity);
     Task<User?> GetUserAsync(string userName, string password);
+    Task<IEnumerable<GetAllUsersResponseDto>> GetAllUsersAsync();
 }
