@@ -1,10 +1,8 @@
-﻿using Azure.Core;
-using Fron.Application.Abstractions.Application;
+﻿using Fron.Application.Abstractions.Application;
 using Fron.Application.Abstractions.Persistence;
 using Fron.Application.Mapping;
 using Fron.Domain.Constants;
 using Fron.Domain.Dto.Role;
-using Fron.Domain.Dto.UserRegistration;
 using Fron.Domain.GenericResponse;
 using System.Transactions;
 

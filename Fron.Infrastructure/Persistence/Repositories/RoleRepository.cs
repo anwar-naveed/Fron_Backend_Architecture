@@ -29,7 +29,7 @@ public class RoleRepository : AuthRepository, IRoleRepository
     public async Task<Role?> GetByIdAsync(long id)
     {
         return await _authContext.Role
-            .Where(e => e.Id == id)
+            .Where(e => e.Id == id && e.IsActive == true)
             .FirstOrDefaultAsync();
     }
 
@@ -41,9 +41,14 @@ public class RoleRepository : AuthRepository, IRoleRepository
 
     public async Task<IEnumerable<GetAllRolesResponseDto>> GetAllRolesAsync()
     {
-        return await _authContext.Role.Select(x => new GetAllRolesResponseDto(
+        return await _authContext.Role
+            .Where(x => x.IsActive == true)
+            .Select(x => new GetAllRolesResponseDto(
             x.Id,
-            x.Name
+            x.Name,
+            x.IsActive,
+            x.CreatedOn,
+            x.ModifiedOn
             ))
             .AsNoTracking()
             .ToListAsync();

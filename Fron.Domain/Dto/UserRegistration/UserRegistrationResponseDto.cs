@@ -2,5 +2,8 @@
 public sealed record UserRegistrationResponseDto(
     long Id,
     string Name,
-    string Username
+    string Username,
+    bool IsActive,
+    DateTime CreatedOn,
+    DateTime ModifiedOn
 );
