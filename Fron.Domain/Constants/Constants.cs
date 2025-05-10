@@ -52,6 +52,7 @@ public struct StoreProcedureNames
     public const string GET_USER = "procGetUsers";
     public const string SOURCE_MASTER_INSERT = "espSourceMaster_Insert";
     public const string SOURCE_MASTER_UPDATE = "espSourceMaster_Update";
+    public const string EMPLOYEE_HIERARCHY_UPDATE = "HumanResources.uspUpdateEmployeeLogin";
 }
 
 public struct SPParams
@@ -59,6 +60,12 @@ public struct SPParams
     public const string COMPANY_ID = "@CompanyID";
     public const string SOURCE_ID = "@SourceID";
     public const string SOURCE_NAME = "@SourceName";
+    public const string BUSINESS_ENTITY_ID = "@BusinessEntityID";
+    public const string ORGANIZATION_NODE = "@OrganizationNode";
+    public const string LOGIN_ID = "@LoginID";
+    public const string JOB_TITLE = "@JobTitle";
+    public const string HIRE_DATE = "@HireDate";
+    public const string CURRENT_FLAG = "@CurrentFlag";
 }
 
 public struct CommandConstants
