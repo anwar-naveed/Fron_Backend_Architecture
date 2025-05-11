@@ -13,6 +13,7 @@ public struct ApiStatusCodes
     public const short FILE_NOT_FOUND = 107;
     public const short FILE_SAVED_FAILED = 108;
     public const short RECORD_CANNOT_BE_UPDATED = 109;
+    public const short TEMPLATE_NOT_FOUND = 110;
 
     // 200 series for success
     public const short RECORD_SAVED_SUCCESSFULLY = 200;
@@ -45,6 +46,7 @@ public struct ApiResponseMessages
     public const string FILE_NOT_FOUND = "File not found.";
     public const string FILE_SAVED_FAILED = "File saved failed.";
     public const string RECORD_CANNOT_BE_UPDATED = "Record cannot be updated.";
+    public const string TEMPLATE_NOT_FOUND = "Template not found.";
 }
 
 public struct StoreProcedureNames
@@ -122,6 +124,8 @@ public struct FileNames
     public const string SPA_DOCUMENT = "SPA.docx";
     public const string VAT_INVOICE = "VATInvoice.docx";
     public const string ROLES_UPLOAD_ERROR = "RolesUploadErrorFile";
+    public const string PRODUCT_PDF_FILE = "ProductInventoryPdf";
+    public const string PRODUCT_INVENTORY_PDF_FILE = "ProductInventory";
 }
 
 public struct EmailTemplates

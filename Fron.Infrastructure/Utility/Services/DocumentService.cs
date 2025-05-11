@@ -2,6 +2,9 @@
 using Fron.Domain.Configuration;
 using Microsoft.Extensions.Options;
 using OfficeOpenXml;
+using Scriban;
+using Syncfusion.HtmlConverter;
+using Syncfusion.Pdf;
 
 namespace Fron.Infrastructure.Utility.Services;
 public class DocumentService : IDocumentService
@@ -151,5 +154,49 @@ public class DocumentService : IDocumentService
         }
 
         return list;
+    }
+
+    public Stream GeneratePDFStream<T>(T model, string templateFileContent, string templateResourcesPath, Stream pdfStream)
+    {
+        //Load html template
+        //var invoiceTemplate = File.ReadAllText("../../../Template/index.html");
+        var template = Template.Parse(templateFileContent);
+        var templateData = new { model };
+        //Fill template with real invoice data
+        var renderedContent = template.Render(templateData);
+        //Convert html to PDF
+        return ConvertToPDFStream(renderedContent, templateResourcesPath, pdfStream);
+    }
+
+
+    private Stream ConvertToPDFStream(string htmlContent, string templateResourcesPath, Stream pdfStream)
+    {
+
+        //Initialize HTML to PDF converter with Blink rendering engine
+        //HtmlToPdfConverter htmlConverter = new HtmlToPdfConverter(HtmlRenderingEngine.Blink);
+
+        HtmlToPdfConverter htmlConverter = new HtmlToPdfConverter();
+
+        BlinkConverterSettings blinkConverterSettings = new BlinkConverterSettings();
+
+        blinkConverterSettings.HtmlEncoding = System.Text.Encoding.UTF8;
+        blinkConverterSettings.PdfPageSize = PdfPageSize.A4;
+        blinkConverterSettings.EnableAutoScaling = true;
+
+        htmlConverter.ConverterSettings = blinkConverterSettings;
+        htmlConverter.ConverterSettings.Orientation = PdfPageOrientation.Portrait;
+
+        //Convert HTML string to PDF
+        PdfDocument document = htmlConverter.Convert(htmlContent, templateResourcesPath);
+
+        //FileStream fs = new FileStream("Output.pdf", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+
+        //Save and close the PDF document
+
+        //document.Save(fs);
+        document.Save(pdfStream);
+        document.Close(true);
+        document.Dispose();
+        return pdfStream;
     }
 }
