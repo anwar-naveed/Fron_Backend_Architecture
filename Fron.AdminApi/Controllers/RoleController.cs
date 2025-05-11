@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Fron.Application.Abstractions.Application;
-using Microsoft.AspNetCore.Authorization;
+﻿using Fron.Application.Abstractions.Application;
+using Fron.Domain.Constants;
 using Fron.Domain.Dto.Role;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Fron.AdminApi.Controllers;
 
@@ -34,4 +34,20 @@ public class RoleController : BaseApiController
     [HttpGet("Get-Role")]
     public async Task<IActionResult> GetRoleByIdAsync(long Id)
         => Ok(await _roleService.GetRoleByIdAsync(Id));
+
+    [HttpPost("Bulk-Insert-Roles")]
+    public async Task<IActionResult> BulkInsertRolesAsync(IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+        {
+            return BadRequest("File is empty");
+        }
+
+        if (!Path.GetExtension(file.FileName).Equals(FileExtensions.EXCEL, StringComparison.OrdinalIgnoreCase))
+            return BadRequest("File extension is not supported");
+
+        var returnFileResponse = await _roleService.BulkInsertRolesAsync(file);
+
+        return File(returnFileResponse.Payload!.Stream, returnFileResponse.Payload.mimeType, returnFileResponse.Payload.FileName);
+    }
 }

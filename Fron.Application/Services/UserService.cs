@@ -57,7 +57,7 @@ public class UserService : IUserService
     {
         var result = await _userRepository.GetAllUsersAsync();
 
-        if (result == null || result.Count() < 0)
+        if (result == null || result.Count() < 1)
         {
             return GenericResponse<IEnumerable<GetAllUsersResponseDto>>.Failure(
                 ApiResponseMessages.RECORD_NOT_FOUND,
