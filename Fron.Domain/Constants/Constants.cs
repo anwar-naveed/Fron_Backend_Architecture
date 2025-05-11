@@ -155,3 +155,9 @@ public struct MimeTypes
     public const string OCTET = "application/octet-stream";
     public const string PDF = "application/pdf";
 }
+
+public struct BlobContainerNames
+{
+    public const string DOCUMENTS_CONTAINER = "Fron";
+}
+

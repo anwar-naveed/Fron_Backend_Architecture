@@ -1,10 +1,13 @@
 ﻿using Fron.Application.Abstractions.Infrastructure;
 using Fron.Domain.Configuration;
+using Microsoft.AspNetCore.Http.Internal;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using OfficeOpenXml;
 using Scriban;
 using Syncfusion.HtmlConverter;
 using Syncfusion.Pdf;
+using Fron.Domain.Constants;
 
 namespace Fron.Infrastructure.Utility.Services;
 public class DocumentService : IDocumentService
@@ -156,20 +159,19 @@ public class DocumentService : IDocumentService
         return list;
     }
 
-    public Stream GeneratePDFStream<T>(T model, string templateFileContent, string templateResourcesPath, Stream pdfStream)
+    public void GeneratePDFStream<T>(T model, string templateFileContent, string templateResourcesPath, Stream pdfStream)
     {
         //Load html template
-        //var invoiceTemplate = File.ReadAllText("../../../Template/index.html");
         var template = Template.Parse(templateFileContent);
         var templateData = new { model };
         //Fill template with real invoice data
         var renderedContent = template.Render(templateData);
         //Convert html to PDF
-        return ConvertToPDFStream(renderedContent, templateResourcesPath, pdfStream);
+        ConvertToPDFStream(renderedContent, templateResourcesPath, pdfStream);
     }
 
 
-    private Stream ConvertToPDFStream(string htmlContent, string templateResourcesPath, Stream pdfStream)
+    private void ConvertToPDFStream(string htmlContent, string templateResourcesPath, Stream pdfStream)
     {
 
         //Initialize HTML to PDF converter with Blink rendering engine
@@ -197,6 +199,91 @@ public class DocumentService : IDocumentService
         document.Save(pdfStream);
         document.Close(true);
         document.Dispose();
-        return pdfStream;
+    }
+
+    public IFormFile? CreateFormFileFromFile(string filePath, string contentType)
+    {
+        try
+        {
+            // Read the file into a byte array
+            byte[] fileBytes = File.ReadAllBytes(filePath);
+
+            // Create a memory stream from the byte array
+            MemoryStream memoryStream = new MemoryStream(fileBytes);
+
+            // Create the FormFile object
+            IFormFile formFile = new FormFile(memoryStream, 0, fileBytes.Length, "file", Path.GetFileName(filePath))
+            {
+                Headers = new HeaderDictionary(),
+                ContentType = contentType
+            };
+
+            return formFile;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred while creating the FormFile: {ex.Message}");
+            return null;
+        }
+    }
+
+    public IFormFile? CreateFormFileFromFile(Stream stream, string contentType, string fileNameWithExtension)
+    {
+        try
+        {
+            // Create the FormFile object
+            IFormFile formFile = new FormFile(stream, 0, stream.Length, "file", fileNameWithExtension)
+            {
+                Headers = new HeaderDictionary(),
+                ContentType = contentType
+            };
+
+            return formFile;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred while creating the FormFile: {ex.Message}");
+            return null;
+        }
+    }
+
+    public string GetFileNameFromPath(string filePath)
+    {
+        return Path.GetFileName(filePath);
+    }
+
+    public string GetFileNameWithoutExtension(string filePath)
+    {
+        return Path.GetFileNameWithoutExtension(filePath);
+    }
+
+    public string GetFileExtension(string fileNameWithExtension)
+    {
+        return Path.GetExtension(fileNameWithExtension);
+    }
+
+    public string GetFilePath(string fileNameWithExtension, string directoryPath)
+    {
+        return Path.Combine(directoryPath, fileNameWithExtension);
+    }
+    public string GetFilePathWithoutExtension(string fileNameWithExtension, string directoryPath)
+    {
+        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileNameWithExtension);
+        return Path.Combine(directoryPath, fileNameWithoutExtension);
+    }
+
+    public string GetFileNameWithNewExtension(string fileNameWithExtension, string newExtension)
+    {
+        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileNameWithExtension);
+        return Path.ChangeExtension(fileNameWithoutExtension, newExtension);
+    }
+
+    public string GetDestinationFilePath(string fileNameWithExtension, string destinationFileWithExtension)
+    {
+        FileInfo executeProject = new FileInfo(fileNameWithExtension);
+        string basePath = Directory.GetCurrentDirectory();
+        string destinationPhysicalFile = basePath.Replace(executeProject.Directory!.Name, destinationFileWithExtension);
+        destinationPhysicalFile = destinationPhysicalFile.Replace("..", "").Replace("/", "\\").Replace("\\\\", "\\");
+        return destinationPhysicalFile;
     }
 }
