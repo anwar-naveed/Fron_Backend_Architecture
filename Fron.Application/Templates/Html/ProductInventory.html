@@ -1,0 +1,75 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Product Details</title>
+    <link rel="stylesheet" href="style.css" media="all" />
+  </head>
+  <body>
+    <header class="clearfix">
+      <div id="logo">
+        <img src="logo.png">
+      </div>
+      <div id="company">
+        <h2 class="name">{{model.name}}</h2>
+        <div>{{model.color}}</div>
+        <div>{{model.size}}</div>
+      </div>
+    </header>
+    <main>
+        <div id="details" class="clearfix">
+            <div id="client">
+                <div class="to">INVOICE TO:</div>
+                <h2 class="name">FIRST_NAME</h2>
+                <div class="address">1234</div>
+                <div class="email">a@a.com</div>
+            </div>
+            <div id="invoice">
+                <h1>Invoice Number</h1>
+                <div class="date">Date of Invoice: ISSUE_DATE</div>
+                <div class="date">Due Date: DUE_DATE</div>
+            </div>
+        </div>
+        <table border="0" cellspacing="0" cellpadding="0">
+            <thead>
+                <tr>
+                    <th class="no">#</th>
+                    <th class="desc">SHELF</th>
+                    <th class="unit">UNIT PRICE</th>
+                    <th class="qty">QUANTITY</th>
+                </tr>
+            </thead>
+            <tbody id="invoiceItems">
+                {{- index = 1 -}}
+                {{ for item in model.product_inventories }}
+                <tr>
+                    <td class="no">{{index}}</td>
+                    <td class="desc"><h3>{{item.shelf}}</h3></td>
+                    <td class="unit">${{model.list_price}}</td>
+                    <td class="qty">{{item.quantity}}</td>
+                </tr>
+                {{index = index + 1}}
+                {{end}}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="2">SUBTOTAL</td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="2">TAX 25%</td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="2">GRAND TOTAL</td>
+                </tr>
+            </tfoot>
+        </table>
+        <div id="thanks">Thank you!</div>
+        <div id="notices">
+            <div>NOTICE:</div>
+            <div class="notice">A finance charge of 1.5% will be made on unpaid balances after 30 days.</div>
+        </div>
+    </main>
+  </body>
+</html>

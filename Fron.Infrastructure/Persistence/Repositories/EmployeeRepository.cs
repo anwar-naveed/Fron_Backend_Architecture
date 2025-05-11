@@ -57,6 +57,7 @@ public class EmployeeRepository : BaseRepository, IEmployeeRepository
                 x.Rowguid,
                 x.ModifiedDate
                 ))
+            .AsNoTracking()
             .FirstOrDefaultAsync();
     }
 }

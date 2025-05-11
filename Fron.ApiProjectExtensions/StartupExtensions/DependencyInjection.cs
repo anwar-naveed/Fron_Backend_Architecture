@@ -24,6 +24,7 @@ public static class DependencyInjection
         services.AddScoped<IUserResolverService, UserResolverService>();
         services.AddScoped<IEmployeeService, EmployeeService>();
         services.AddScoped<IDocumentService, DocumentService>();
+        services.AddScoped<IProductService, ProductService>();
 
         return services;
     }
@@ -36,6 +37,7 @@ public static class DependencyInjection
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<ILoggingRepository, LoggingRepository>();
         services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+        services.AddScoped<IProductRepository, ProductRepository>();
 
         return services;
     }

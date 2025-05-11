@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 using Fron.Domain.Configuration;
+using Syncfusion.Licensing;
 
 namespace Fron.ApiProjectExtensions.StartupExtensions;
 public static class ApplicationConfiguration
@@ -143,12 +144,15 @@ public static class ApplicationConfiguration
         services.Configure<EncryptionConfiguration>(configuration.GetSection("EncryptionConfiguration"));
         services.Configure<TemplateConfiguraion>(configuration.GetSection("TemplateConfiguraion"));
         services.Configure<OrganizationConfiguration>(configuration.GetSection("OrganizationConfiguration"));
+        services.Configure<PdfConfiguration>(configuration.GetSection("PdfConfiguration"));
 
         return services;
     }
 
     public static IServiceCollection AddApplicationConfiguration(this IServiceCollection services, IConfiguration configuration, string title, string version)
     {
+        SyncfusionLicenseProvider.RegisterLicense(configuration.GetValue<string>("PdfConfiguration:SyncFusionLicenseKey"));
+
         services.AddApplicationServices();
 
         services.AddInfrastructureRepositories(configuration);
