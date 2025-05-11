@@ -25,7 +25,7 @@ public class EmployeeService : IEmployeeService
     public async Task<GenericResponse> UpdateEmployeeHierarchyAsync(EmployeeHierarchyUpdateRequestDto request)
     {
         if (request == null ||
-            request.BusinessEntityId < 0 ||
+            request.BusinessEntityId < 1 ||
             string.IsNullOrEmpty(request.LoginId))
         {
             return GenericResponse.Failure(ApiResponseMessages.INVALID_RECORD, ApiStatusCodes.FAILED);

@@ -1,4 +1,5 @@
-﻿using Fron.Application.Abstractions.Persistence;
+﻿using EFCore.BulkExtensions;
+using Fron.Application.Abstractions.Persistence;
 using Fron.Domain.AuthEntities;
 using Fron.Domain.Dto.Role;
 using Fron.Infrastructure.Persistence.Contexts;
@@ -52,5 +53,21 @@ public class RoleRepository : AuthRepository, IRoleRepository
             ))
             .AsNoTracking()
             .ToListAsync();
+    }
+
+    public async Task BulkInsertRolesAsync(IEnumerable<Role> roles)
+    {
+        await _authContext.BulkInsertAsync(roles, new BulkConfig
+        {
+            PreserveInsertOrder = true,
+            SetOutputIdentity = true,
+            BatchSize = 1000
+        });
+        await _authContext.BulkSaveChangesAsync(new BulkConfig
+        {
+            PreserveInsertOrder = true,
+            SetOutputIdentity = true,
+            BatchSize = 1000
+        });
     }
 }

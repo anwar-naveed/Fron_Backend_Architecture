@@ -114,12 +114,14 @@ public struct FileExtensions
     public const string IMAGE = ".image";
     public const string PDF = ".pdf";
     public const string MP4 = ".mp4";
+    public const string EXCEL = ".xlsx";
 }
 
 public struct FileNames
 {
     public const string SPA_DOCUMENT = "SPA.docx";
     public const string VAT_INVOICE = "VATInvoice.docx";
+    public const string ROLES_UPLOAD_ERROR = "RolesUploadErrorFile";
 }
 
 public struct EmailTemplates
@@ -142,4 +144,10 @@ public struct Characters
     public const string LEFT_BRACE = "\u007B";
     public const string RIGHT_BRACE = "\u007D";
     public const string DOT = "\u002E";
+}
+
+public struct MimeTypes
+{
+    public const string OCTET = "application/octet-stream";
+    public const string PDF = "application/pdf";
 }

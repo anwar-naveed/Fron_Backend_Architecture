@@ -9,4 +9,5 @@ public interface IRoleRepository
     Task<Role?> GetByIdAsync(long id);
     Task<Role> UpdateRoleAsync(Role entity);
     Task<IEnumerable<GetAllRolesResponseDto>> GetAllRolesAsync();
+    Task BulkInsertRolesAsync(IEnumerable<Role> roles);
 }

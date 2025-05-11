@@ -111,14 +111,20 @@ public static class ApplicationConfiguration
         services.AddDbContext<DataDbContext>((provider, options) =>
         {
             //var tenantService = provider.GetRequiredService<TenantService>();
-            options.UseSqlServer(configuration.GetConnectionString("DataDbConnection"));
+            options.UseSqlServer(configuration.GetConnectionString("DataDbConnection"), conf =>
+            {
+                conf.UseHierarchyId();
+            });
         },
         ServiceLifetime.Scoped,
         ServiceLifetime.Singleton);
 
         services.AddDbContext<AuthDbContext>((provider, options) =>
         {
-            options.UseSqlServer(configuration.GetConnectionString("AuthDbConnection"));
+            options.UseSqlServer(configuration.GetConnectionString("AuthDbConnection"), conf =>
+            {
+                conf.UseHierarchyId();
+            });
         },
         ServiceLifetime.Scoped,
         ServiceLifetime.Singleton);
@@ -136,6 +142,7 @@ public static class ApplicationConfiguration
         services.Configure<ConnectionStrings>(configuration.GetSection("ConnectionStrings"));
         services.Configure<EncryptionConfiguration>(configuration.GetSection("EncryptionConfiguration"));
         services.Configure<TemplateConfiguraion>(configuration.GetSection("TemplateConfiguraion"));
+        services.Configure<OrganizationConfiguration>(configuration.GetSection("OrganizationConfiguration"));
 
         return services;
     }
