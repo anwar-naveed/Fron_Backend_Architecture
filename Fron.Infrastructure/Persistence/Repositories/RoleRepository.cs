@@ -57,17 +57,7 @@ public class RoleRepository : AuthRepository, IRoleRepository
 
     public async Task BulkInsertRolesAsync(IEnumerable<Role> roles)
     {
-        await _authContext.BulkInsertAsync(roles, new BulkConfig
-        {
-            PreserveInsertOrder = true,
-            SetOutputIdentity = true,
-            BatchSize = 1000
-        });
-        await _authContext.BulkSaveChangesAsync(new BulkConfig
-        {
-            PreserveInsertOrder = true,
-            SetOutputIdentity = true,
-            BatchSize = 1000
-        });
+        await _authContext.AddRangeAsync(roles);
+        await _authContext.SaveChangesAsync();
     }
 }
