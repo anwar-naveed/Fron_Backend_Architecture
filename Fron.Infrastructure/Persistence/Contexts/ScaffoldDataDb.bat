@@ -16,7 +16,7 @@ rem Set the output directory based on the batch file's directory
 rem Print the output directory path for verification
 echo Output Directory: %outputDir%
 
- dotnet ef dbcontext scaffold "Data Source=DESKTOP-HIAGS2V;Initial Catalog=AdventureWorks;User ID=sa;Password=123;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True" Microsoft.EntityFrameworkCore.SqlServer -o "../Fron.Domain/Entities" --context-dir "Persistence/Contexts" --force --no-pluralize --namespace Fron.Domain.Entities --context DataDbContext --context-namespace Fron.Infrastructure.Persistence.Contexts
+ dotnet ef dbcontext scaffold "Data Source=DESKTOP-HIAGS2V;Initial Catalog=AdventureWorks;User ID=sa;Password=123;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True" Microsoft.EntityFrameworkCore.SqlServer -o "../Fron.Domain/Entities" --context-dir "Persistence/Contexts" --force --no-pluralize --no-onconfiguring --namespace Fron.Domain.Entities --context DataDbContext --context-namespace Fron.Infrastructure.Persistence.Contexts
  
  echo "Successfully generated"
 
