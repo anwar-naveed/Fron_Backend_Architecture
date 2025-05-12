@@ -12,11 +12,7 @@ public class ProductController : BaseApiController
         _productService = productService;
     }
 
-    [HttpPost("Get-Product-Pdf")] //If HttpGet is used then getting CORS error in swagger but api is giving correct response in POSTMAN
+    [HttpGet("Get-Product-Pdf")] //Use HttpPost if getting CORS error in swagger but api is giving correct response in POSTMAN
     public async Task<IActionResult> GetProductPdfAsync(int Id)
-    {
-        var returnFileResponse = await _productService.GetProductPdfByIdAsync(Id);
-
-        return File(returnFileResponse.Payload!.Stream, returnFileResponse.Payload.mimeType, returnFileResponse.Payload.FileName);
-    }
+        =>Ok(await _productService.GetProductPdfByIdAsync(Id));
 }

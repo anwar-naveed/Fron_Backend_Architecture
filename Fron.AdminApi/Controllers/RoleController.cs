@@ -1,4 +1,5 @@
 ﻿using Fron.Application.Abstractions.Application;
+using Fron.Application.Abstractions.Infrastructure;
 using Fron.Domain.Constants;
 using Fron.Domain.Dto.Role;
 using Microsoft.AspNetCore.Mvc;
@@ -9,10 +10,14 @@ namespace Fron.AdminApi.Controllers;
 public class RoleController : BaseApiController
 {
     private readonly IRoleService _roleService;
+    private readonly IDocumentService _documentService;
 
-    public RoleController(IRoleService roleService)
+    public RoleController(
+        IRoleService roleService,
+        IDocumentService documentService)
     {
         _roleService = roleService;
+        _documentService = documentService;
     }
 
     [HttpPost("Role-Create")]
@@ -43,11 +48,9 @@ public class RoleController : BaseApiController
             return BadRequest("File is empty");
         }
 
-        if (!Path.GetExtension(file.FileName).Equals(FileExtensions.EXCEL, StringComparison.OrdinalIgnoreCase))
+        if (!_documentService.GetFileExtension(file.FileName).Equals(FileExtensions.EXCEL, StringComparison.OrdinalIgnoreCase))
             return BadRequest("File extension is not supported");
 
-        var returnFileResponse = await _roleService.BulkInsertRolesAsync(file);
-
-        return File(returnFileResponse.Payload!.Stream, returnFileResponse.Payload.mimeType, returnFileResponse.Payload.FileName);
+        return Ok(await _roleService.BulkInsertRolesAsync(file));
     }
 }

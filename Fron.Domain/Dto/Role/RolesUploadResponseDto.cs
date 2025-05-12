@@ -1,6 +1,8 @@
-﻿namespace Fron.Domain.Dto.Role;
+﻿using Microsoft.AspNetCore.Http;
+
+namespace Fron.Domain.Dto.Role;
 public sealed record RolesUploadResponseDto(
     string FileName,
-    Stream Stream,
+    IFormFile? FormFile,
     string mimeType
 );
