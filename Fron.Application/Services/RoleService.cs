@@ -164,11 +164,19 @@ public class RoleService : IRoleService
             }
             else
             {
-                await _roleRepository.BulkInsertRolesAsync(data.Item1);
-                return GenericResponse<RolesUploadResponseDto>.Success(
-                    responseDto,
-                    ApiResponseMessages.RECORD_SAVED_SUCCESSFULLY,
-                    ApiStatusCodes.RECORD_SAVED_SUCCESSFULLY);
+                using (var scope = new TransactionScope(TransactionScopeOption.Required,
+                new TransactionOptions() { IsolationLevel = System.Transactions.IsolationLevel.Serializable },
+                TransactionScopeAsyncFlowOption.Enabled))
+                {
+                    await _roleRepository.BulkInsertRolesAsync(data.Item1);
+
+                    scope.Complete();
+
+                    return GenericResponse<RolesUploadResponseDto>.Success(
+                        responseDto,
+                        ApiResponseMessages.RECORD_SAVED_SUCCESSFULLY,
+                        ApiStatusCodes.RECORD_SAVED_SUCCESSFULLY);
+                }
             }
         }
     }
