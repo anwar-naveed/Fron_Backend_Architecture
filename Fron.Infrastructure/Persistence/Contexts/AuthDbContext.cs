@@ -16,12 +16,10 @@ public partial class AuthDbContext : DbContext
 
     public virtual DbSet<User> User { get; set; }
     public virtual DbSet<Role> Role { get; set; }
-    public virtual DbSet<UserRole> UserRoles { get; set; }
-    public virtual DbSet<LogEntryErrors> LogEntryErrors { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=DESKTOP-HIAGS2V;Initial Catalog=AdventureWorksAuth;User ID=sa;Password=123;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True");
+    public virtual DbSet<UserRole> UserRoles { get; set; }
+
+    public virtual DbSet<LogEntryErrors> LogEntryErrors { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
