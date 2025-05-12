@@ -1,5 +1,4 @@
-﻿using EFCore.BulkExtensions;
-using Fron.Application.Abstractions.Persistence;
+﻿using Fron.Application.Abstractions.Persistence;
 using Fron.Domain.AuthEntities;
 using Fron.Domain.Dto.Role;
 using Fron.Infrastructure.Persistence.Contexts;

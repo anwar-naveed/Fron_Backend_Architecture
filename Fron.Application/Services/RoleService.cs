@@ -150,7 +150,10 @@ public class RoleService : IRoleService
 
             data.Item2.Position = 0; //stream recieved
             string excelName = $"{FileNames.ROLES_UPLOAD_ERROR}-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}{FileExtensions.EXCEL}";
-            RolesUploadResponseDto responseDto = new RolesUploadResponseDto(excelName, data.Item2, MimeTypes.OCTET);
+
+            var formFile = _documentService.CreateFormFileFromFile(data.Item2, MimeTypes.EXCEL, excelName);
+
+            RolesUploadResponseDto responseDto = new RolesUploadResponseDto(excelName, formFile, MimeTypes.EXCEL);
 
             if (data.Item1 == null || data.Item1.Count < 1)
             {

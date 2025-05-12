@@ -26,18 +26,21 @@ public class ProductService : IProductService
 
     public async Task<GenericResponse<ProductFileResponseDto>> GetProductPdfByIdAsync(int Id)
     {
-        var stream = new MemoryStream();
+        using var stream = new MemoryStream();
         var entity = await _productRepository.GetByIdAsync(Id);
         stream.Position = 0;
         string pdfName = $"{FileNames.PRODUCT_PDF_FILE}-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}{FileExtensions.PDF}";
         string sourceTemplate = $@"{_templateConfiguration.TemplateDirectory}/Html/{FileNames.PRODUCT_INVENTORY_PDF_FILE}{FileExtensions.HTML}";
-        ProductFileResponseDto responseDto = new ProductFileResponseDto(pdfName, stream, MimeTypes.PDF);
         if (!File.Exists(sourceTemplate))
         {
+            var formFile = _documentService.CreateFormFileFromFile(stream, MimeTypes.PDF, pdfName);
+            ProductFileResponseDto responseDto = new ProductFileResponseDto(pdfName, formFile, MimeTypes.PDF);
             return GenericResponse<ProductFileResponseDto>.Failure(responseDto, ApiResponseMessages.TEMPLATE_NOT_FOUND, ApiStatusCodes.TEMPLATE_NOT_FOUND);
         }
         else if (entity == null)
         {
+            var formFile = _documentService.CreateFormFileFromFile(stream, MimeTypes.PDF, pdfName);
+            ProductFileResponseDto responseDto = new ProductFileResponseDto(pdfName, formFile, MimeTypes.PDF);
             return GenericResponse<ProductFileResponseDto>.Failure(responseDto, ApiResponseMessages.RECORD_NOT_FOUND, ApiStatusCodes.RECORD_NOT_FOUND);
         }
         else
@@ -50,7 +53,8 @@ public class ProductService : IProductService
                 Path.GetFullPath($@"{_templateConfiguration.TemplateDirectory}/Html/"),
                 stream);
             stream.Position = 0;
-
+            var formFile = _documentService.CreateFormFileFromFile(stream, MimeTypes.PDF, pdfName);
+            ProductFileResponseDto responseDto = new ProductFileResponseDto(pdfName, formFile, MimeTypes.PDF);
             return GenericResponse<ProductFileResponseDto>.Success(
                 responseDto,
                 ApiResponseMessages.RECORD_FETCHED_SUCCESSFULLY,

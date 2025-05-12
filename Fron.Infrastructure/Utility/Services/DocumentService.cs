@@ -1,13 +1,11 @@
 ﻿using Fron.Application.Abstractions.Infrastructure;
 using Fron.Domain.Configuration;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using OfficeOpenXml;
 using Scriban;
 using Syncfusion.HtmlConverter;
 using Syncfusion.Pdf;
-using Fron.Domain.Constants;
 
 namespace Fron.Infrastructure.Utility.Services;
 public class DocumentService : IDocumentService
@@ -212,7 +210,7 @@ public class DocumentService : IDocumentService
             MemoryStream memoryStream = new MemoryStream(fileBytes);
 
             // Create the FormFile object
-            IFormFile formFile = new FormFile(memoryStream, 0, fileBytes.Length, "file", Path.GetFileName(filePath))
+            IFormFile formFile = new FormFile(memoryStream, 0, fileBytes.Length, "file", GetFileNameFromPath(filePath))
             {
                 Headers = new HeaderDictionary(),
                 ContentType = contentType
@@ -232,7 +230,7 @@ public class DocumentService : IDocumentService
         try
         {
             // Create the FormFile object
-            IFormFile formFile = new FormFile(stream, 0, stream.Length, "file", fileNameWithExtension)
+            var formFile = new FormFile(stream, 0, stream.Length, "file", fileNameWithExtension)
             {
                 Headers = new HeaderDictionary(),
                 ContentType = contentType

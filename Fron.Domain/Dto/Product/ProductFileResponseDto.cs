@@ -1,6 +1,8 @@
-﻿namespace Fron.Domain.Dto.Product;
+﻿using Microsoft.AspNetCore.Http;
+
+namespace Fron.Domain.Dto.Product;
 public sealed record ProductFileResponseDto(
     string FileName,
-    Stream Stream,
+    IFormFile? FormFile,
     string mimeType
 );
