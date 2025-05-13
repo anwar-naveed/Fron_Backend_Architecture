@@ -6,6 +6,7 @@ using OfficeOpenXml;
 using Scriban;
 using Syncfusion.HtmlConverter;
 using Syncfusion.Pdf;
+using System.Reflection;
 
 namespace Fron.Infrastructure.Utility.Services;
 public class DocumentService : IDocumentService
@@ -245,6 +246,19 @@ public class DocumentService : IDocumentService
         }
     }
 
+    public async Task CreateFileFromFormFileAsync(IFormFile formFile, string filePath)
+    {
+        try
+        {
+            using var stream = new FileStream(filePath, FileMode.Create);
+            await formFile.CopyToAsync(stream);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred while creating the file: {ex.Message}");
+        }
+    }
+
     public string GetFileNameFromPath(string filePath)
     {
         return Path.GetFileName(filePath);
@@ -264,10 +278,16 @@ public class DocumentService : IDocumentService
     {
         return Path.Combine(directoryPath, fileNameWithExtension);
     }
+
     public string GetFilePathWithoutExtension(string fileNameWithExtension, string directoryPath)
     {
         string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileNameWithExtension);
         return Path.Combine(directoryPath, fileNameWithoutExtension);
+    }
+
+    public string GetFilePathBasedExecutingAssemblyPath(string partialPathWithFileExtension)
+    {
+        return GetFilePath(partialPathWithFileExtension, Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!);
     }
 
     public string GetFileNameWithNewExtension(string fileNameWithExtension, string newExtension)
@@ -283,5 +303,10 @@ public class DocumentService : IDocumentService
         string destinationPhysicalFile = basePath.Replace(executeProject.Directory!.Name, destinationFileWithExtension);
         destinationPhysicalFile = destinationPhysicalFile.Replace("..", "").Replace("/", "\\").Replace("\\\\", "\\");
         return destinationPhysicalFile;
+    }
+
+    public void CreateDirectoryIfNotExists(string directoryPath)
+    {
+        Directory.CreateDirectory(directoryPath);
     }
 }

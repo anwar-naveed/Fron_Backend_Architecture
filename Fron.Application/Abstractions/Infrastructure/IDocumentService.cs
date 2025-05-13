@@ -11,11 +11,14 @@ public interface IDocumentService
     void GeneratePDFStream<T>(T model, string templateFileContent, string templateResourcesPath, Stream pdfStream);
     IFormFile? CreateFormFileFromFile(string filePath, string contentType);
     IFormFile? CreateFormFileFromFile(Stream stream, string contentType, string fileNameWithExtension);
+    Task CreateFileFromFormFileAsync(IFormFile formFile, string filePath);
     string GetFileNameFromPath(string filePath);
     string GetFileNameWithoutExtension(string filePath);
     string GetFileExtension(string fileNameWithExtension);
     string GetFilePath(string fileNameWithExtension, string directoryPath);
     string GetFilePathWithoutExtension(string fileNameWithExtension, string directoryPath);
+    string GetFilePathBasedExecutingAssemblyPath(string partialPathWithFileExtension);
     string GetFileNameWithNewExtension(string fileNameWithExtension, string newExtension);
     string GetDestinationFilePath(string fileNameWithExtension, string destinationFileWithExtension);
+    void CreateDirectoryIfNotExists(string directoryPath);
 }

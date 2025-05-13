@@ -145,6 +145,7 @@ public static class ApplicationConfiguration
         services.Configure<TemplateConfiguraion>(configuration.GetSection("TemplateConfiguraion"));
         services.Configure<OrganizationConfiguration>(configuration.GetSection("OrganizationConfiguration"));
         services.Configure<PdfConfiguration>(configuration.GetSection("PdfConfiguration"));
+        services.Configure<NonTemplateConfiguration>(configuration.GetSection("NonTemplateConfiguration"));
 
         return services;
     }
