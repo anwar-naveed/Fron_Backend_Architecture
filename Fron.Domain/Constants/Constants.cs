@@ -14,6 +14,7 @@ public struct ApiStatusCodes
     public const short FILE_SAVED_FAILED = 108;
     public const short RECORD_CANNOT_BE_UPDATED = 109;
     public const short TEMPLATE_NOT_FOUND = 110;
+    public const short INVALID_PROPERTY_FOUND = 120;
 
     // 200 series for success
     public const short RECORD_SAVED_SUCCESSFULLY = 200;
@@ -47,6 +48,7 @@ public struct ApiResponseMessages
     public const string FILE_SAVED_FAILED = "File saved failed.";
     public const string RECORD_CANNOT_BE_UPDATED = "Record cannot be updated.";
     public const string TEMPLATE_NOT_FOUND = "Template not found.";
+    public const string INVALID_PROPERTY_FOUND = "Invalid property found.";
 }
 
 public struct StoreProcedureNames
@@ -161,5 +163,28 @@ public struct MimeTypes
 public struct BlobContainerNames
 {
     public const string DOCUMENTS_CONTAINER = "Fron";
+}
+
+public enum EmailType
+{
+    Register = 1,
+    Login,
+    ForgotPassword,
+    VerifyEmail
+}
+
+public enum TemplateExtension
+{
+    Video = 1,
+    Excel,
+    Word,
+    Html,
+    HtmlResource
+}
+
+public enum FileCategory
+{
+    Template = 1,
+    NonTemplate
 }
 

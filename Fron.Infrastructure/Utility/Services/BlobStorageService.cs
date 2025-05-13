@@ -13,10 +13,8 @@ public class BlobStorageService : IBlobStorageService
         _blobServiceClient = new BlobServiceClient(connectionString);
     }
 
-    public async Task<string> UploadFileAsync(IFormFile file, string blobContainerName)
+    public async Task<string> UploadFileAsync(IFormFile file, string blobName, string blobContainerName)
     {
-        string blobName = $@"{Guid.NewGuid().ToString()}{Path.GetExtension(file.FileName)}";
-
         BlobContainerClient containerClient = GetContainerClient(blobContainerName);
 
         await containerClient.CreateIfNotExistsAsync();
@@ -29,10 +27,8 @@ public class BlobStorageService : IBlobStorageService
         return blobClient.Uri.ToString();
     }
 
-    public async Task<string> UploadFileAsync(Stream stream, string fileExtension, string blobContainerName)
+    public async Task<string> UploadFileAsync(Stream stream, string blobName, string blobContainerName)
     {
-        string blobName = $@"{Guid.NewGuid().ToString()}{fileExtension}";
-
         BlobContainerClient containerClient = GetContainerClient(blobContainerName);
 
         await containerClient.CreateIfNotExistsAsync();
