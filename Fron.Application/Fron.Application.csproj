@@ -19,4 +19,11 @@
     <ProjectReference Include="..\Fron.Domain\Fron.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="Templates\**">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
