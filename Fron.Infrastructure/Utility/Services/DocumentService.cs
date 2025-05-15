@@ -200,7 +200,7 @@ public class DocumentService : IDocumentService
         document.Dispose();
     }
 
-    public IFormFile? CreateFormFileFromFile(string filePath, string contentType)
+    public async Task<IFormFile?> CreateFormFileFromFile(string filePath, string contentType)
     {
         try
         {
@@ -217,7 +217,7 @@ public class DocumentService : IDocumentService
                 ContentType = contentType
             };
 
-            return formFile;
+            return await Task.FromResult<IFormFile?>(formFile);
         }
         catch (Exception ex)
         {
@@ -226,7 +226,7 @@ public class DocumentService : IDocumentService
         }
     }
 
-    public IFormFile? CreateFormFileFromFile(Stream stream, string contentType, string fileNameWithExtension)
+    public async Task<IFormFile?> CreateFormFileFromFile(Stream stream, string contentType, string fileNameWithExtension)
     {
         try
         {
@@ -237,7 +237,7 @@ public class DocumentService : IDocumentService
                 ContentType = contentType
             };
 
-            return formFile;
+            return await Task.FromResult<IFormFile?>(formFile);
         }
         catch (Exception ex)
         {
@@ -257,6 +257,20 @@ public class DocumentService : IDocumentService
         {
             Console.WriteLine($"An error occurred while creating the file: {ex.Message}");
         }
+    }
+
+    public async Task CopyToFile(Stream stream, string path)
+    {
+        using var fileStream = File.Create(path);
+        stream.Position = 0;
+        stream.CopyTo(fileStream);
+        await Task.CompletedTask;
+    }
+
+    public async Task<Stream> GetFileStreamAsync(string path)
+    {
+        FileInfo fileInfo = new FileInfo(path);
+        return await Task.FromResult(fileInfo.OpenRead());
     }
 
     public string GetFileNameFromPath(string filePath)
@@ -305,8 +319,14 @@ public class DocumentService : IDocumentService
         return destinationPhysicalFile;
     }
 
-    public void CreateDirectoryIfNotExists(string directoryPath)
+    public async Task CreateDirectoryIfNotExists(string directoryPath)
     {
         Directory.CreateDirectory(directoryPath);
+        await Task.CompletedTask;
+    }
+
+    public bool CheckFileExists(string filePath)
+    {
+        return File.Exists(filePath);
     }
 }

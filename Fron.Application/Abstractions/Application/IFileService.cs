@@ -5,4 +5,5 @@ namespace Fron.Application.Abstractions.Application;
 public interface IFileService
 {
     Task<GenericResponse<FileUploadResponseDto>> FileSaveAsync(FileUploadRequestDto requestDto);
+    Task<GenericResponse<GetFileResponseDto>> GetFileAsync(GetFileRequestDto requestDto);
 }

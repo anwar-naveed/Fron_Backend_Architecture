@@ -26,6 +26,9 @@ public static class DependencyInjection
         services.AddScoped<IDocumentService, DocumentService>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IFileService, FileService>();
+        services.AddScoped<IFileStorageService, FileStorageService>();
+        services.AddScoped<IFileCategoryService, FileCategoryService>();
+        services.AddScoped<ITemplateExtensionService, TemplateExtensionService>();
 
         return services;
     }
@@ -41,6 +44,9 @@ public static class DependencyInjection
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddSingleton<IBlobStorageService>(provider =>
             new BlobStorageService(configuration["BlobStorage:ConnectionString"]!));
+        services.AddScoped<IFileCategoryRepository, FileCategoryRepository>();
+        services.AddScoped<IFileStorageRepository, FileStorageRepository>();
+        services.AddScoped<ITemplateExtensionRepository, TemplateExtensionRepository>();
 
         return services;
     }
