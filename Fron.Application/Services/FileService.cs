@@ -232,13 +232,13 @@ public class FileService : IFileService
 
                 foreach (var file in fileStorage)
                 {
-                    var blobInfo = await _blobStorageService.DownloadFileAsync(file.StorageUrl, BlobContainerNames.DOCUMENTS_CONTAINER);
-                    if (blobInfo == null || blobInfo.Content.Length == 0)
+                    var blobInfo = await _blobStorageService.DownloadFileAsync(file.Name, BlobContainerNames.DOCUMENTS_CONTAINER);
+                    if (blobInfo == null)
                     {
                         return GenericResponse<GetFileResponseDto>.Failure(ApiResponseMessages.TEMPLATE_NOT_FOUND, ApiStatusCodes.TEMPLATE_NOT_FOUND);
                     }
 
-                    await _documentService.CopyToFile(blobInfo.Content, directoryPath); //Here checking is required
+                    await _documentService.CopyToFile(blobInfo.Content, filePath); //Here checking is required
                     blobInfo.Dispose();
                 }
 

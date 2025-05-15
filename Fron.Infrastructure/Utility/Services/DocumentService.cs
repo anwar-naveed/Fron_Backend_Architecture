@@ -262,7 +262,7 @@ public class DocumentService : IDocumentService
     public async Task CopyToFile(Stream stream, string path)
     {
         using var fileStream = File.Create(path);
-        stream.Position = 0;
+        //stream.Position = 0;
         stream.CopyTo(fileStream);
         await Task.CompletedTask;
     }
