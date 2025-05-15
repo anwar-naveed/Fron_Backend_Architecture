@@ -9,9 +9,11 @@ public interface IDocumentService
     (List<T>, Stream) GetListFromExcelSheet<T>(Stream fileStream, List<string>? propNameToSkip = null);
     List<T> GetListFromExcelSheet<T>(ExcelWorksheet sheet, List<string>? propNameToSkip = null);
     void GeneratePDFStream<T>(T model, string templateFileContent, string templateResourcesPath, Stream pdfStream);
-    IFormFile? CreateFormFileFromFile(string filePath, string contentType);
-    IFormFile? CreateFormFileFromFile(Stream stream, string contentType, string fileNameWithExtension);
+    Task<IFormFile?> CreateFormFileFromFile(string filePath, string contentType);
+    Task<IFormFile?> CreateFormFileFromFile(Stream stream, string contentType, string fileNameWithExtension);
     Task CreateFileFromFormFileAsync(IFormFile formFile, string filePath);
+    Task CopyToFile(Stream stream, string path);
+    Task<Stream> GetFileStreamAsync(string path);
     string GetFileNameFromPath(string filePath);
     string GetFileNameWithoutExtension(string filePath);
     string GetFileExtension(string fileNameWithExtension);
@@ -20,5 +22,6 @@ public interface IDocumentService
     string GetFilePathBasedExecutingAssemblyPath(string partialPathWithFileExtension);
     string GetFileNameWithNewExtension(string fileNameWithExtension, string newExtension);
     string GetDestinationFilePath(string fileNameWithExtension, string destinationFileWithExtension);
-    void CreateDirectoryIfNotExists(string directoryPath);
+    Task CreateDirectoryIfNotExists(string directoryPath);
+    bool CheckFileExists(string filePath);
 }

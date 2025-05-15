@@ -14,7 +14,11 @@ public class FileController : BaseApiController
         _fileService = fileService;
     }
 
-    [HttpPost]
+    [HttpPost("File-Save")]
     public async Task<IActionResult> Create([FromForm] FileUploadRequestDto fileRequestDto)
         => Ok(await _fileService.FileSaveAsync(fileRequestDto));
+
+    [HttpPost("File-Get")]
+    public async Task<IActionResult> GetFileAsync(GetFileRequestDto requestDto)
+        => Ok(await _fileService.GetFileAsync(requestDto));
 }

@@ -58,6 +58,10 @@ public partial class DataDbContext : DbContext
 
     public virtual DbSet<ErrorLog> ErrorLog { get; set; }
 
+    public virtual DbSet<FileCategory> FileCategory { get; set; }
+
+    public virtual DbSet<FileStorage> FileStorage { get; set; }
+
     public virtual DbSet<Illustration> Illustration { get; set; }
 
     public virtual DbSet<JobCandidate> JobCandidate { get; set; }
@@ -141,6 +145,8 @@ public partial class DataDbContext : DbContext
     public virtual DbSet<StateProvince> StateProvince { get; set; }
 
     public virtual DbSet<Store> Store { get; set; }
+
+    public virtual DbSet<TemplateExtension> TemplateExtension { get; set; }
 
     public virtual DbSet<TransactionHistory> TransactionHistory { get; set; }
 
@@ -982,6 +988,41 @@ public partial class DataDbContext : DbContext
             entity.Property(e => e.UserName)
                 .HasMaxLength(128)
                 .HasComment("The user who executed the batch in which the error occurred.");
+        });
+
+        modelBuilder.Entity<FileCategory>(entity =>
+        {
+            entity.HasKey(e => e.Id).IsClustered(false);
+
+            entity.ToTable("FileCategory", "Documents");
+
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.ModifiedOn).HasColumnType("datetime");
+            entity.Property(e => e.Name).HasMaxLength(100);
+        });
+
+        modelBuilder.Entity<FileStorage>(entity =>
+        {
+            entity.HasKey(e => e.Id).IsClustered(false);
+
+            entity.ToTable("FileStorage", "Documents");
+
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.FileExtension).HasMaxLength(10);
+            entity.Property(e => e.ModifiedOn).HasColumnType("datetime");
+            entity.Property(e => e.Name).HasMaxLength(100);
+            entity.Property(e => e.StorageUrl).HasMaxLength(250);
+            entity.Property(e => e.TemplateName).HasMaxLength(100);
+
+            entity.HasOne(d => d.FileCategory).WithMany(p => p.FileStorage)
+                .HasForeignKey(d => d.FileCategoryId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_FileStorage_FileCategory");
+
+            entity.HasOne(d => d.TemplateExtension).WithMany(p => p.FileStorage)
+                .HasForeignKey(d => d.TemplateExtensionId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_FileStorage_TemplateExtension");
         });
 
         modelBuilder.Entity<Illustration>(entity =>
@@ -2595,6 +2636,17 @@ public partial class DataDbContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(d => d.SalesPerson).WithMany(p => p.Store).HasForeignKey(d => d.SalesPersonId);
+        });
+
+        modelBuilder.Entity<TemplateExtension>(entity =>
+        {
+            entity.HasKey(e => e.Id).IsClustered(false);
+
+            entity.ToTable("TemplateExtension", "Documents");
+
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.ModifiedOn).HasColumnType("datetime");
+            entity.Property(e => e.Name).HasMaxLength(100);
         });
 
         modelBuilder.Entity<TransactionHistory>(entity =>

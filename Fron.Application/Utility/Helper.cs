@@ -1,7 +1,9 @@
 ﻿using Microsoft.Data.SqlClient;
 using System.Data;
+using Microsoft.Data;
 using System.Security.Cryptography;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace Fron.Application.Utility;
 
@@ -67,5 +69,13 @@ public static class Helper
         }
 
         return value;
+    }
+
+    public static dynamic? GetObjectFromString(string? jsonString)
+    {
+        if (!string.IsNullOrEmpty(jsonString))
+            return JsonConvert.DeserializeObject<dynamic>(jsonString);
+        else
+            return null;
     }
 }

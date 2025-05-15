@@ -31,7 +31,7 @@ For Migrations in Package Manager Console
 
 Add-Migration [MigrationName] -OutputDir MyMigrationDirectoryName -Namespace Z.MyMigrationNamespace -Context Z.MyContextName -Project Z.MyProjectName -StartupProject Z.MyStartupProjectName
 
-Add-Migration Migration04052025-1 -OutputDir Persistence\Migrations -Context Fron.Infrastructure.Persistence.Contexts.AuthDbContext -Project Infrastructure\Fron.Infrastructure -StartupProject Apis\Fron.ApiProjectExtensions
+Add-Migration Migration07052025-1 -OutputDir Persistence\Migrations -Context Fron.Infrastructure.Persistence.Contexts.AuthDbContext -Project Infrastructure\Fron.Infrastructure -StartupProject Apis\Fron.ApiProjectExtensions
 
 For checking of errors use command Add-Migration Check
 
@@ -48,4 +48,56 @@ select [from] from table;
 It is also possible to use the following (useful when querying multiple tables):
 
 select table.[from] from table;
+
+
+For File Storage in Db Use Below script or create entities accordingly for migration
+Create Schema Documents;
+Go
+
+Create Table Documents.FileCategory (
+	Id INT NOT NULL IDENTITY(1,1),
+	Name NVARCHAR(100) NOT NULL,
+	FileCategoryEnum INT NOT NULL,
+	IsActive BIT NOT NULL,
+	CreatedOn DateTime NOT NULL,
+	ModifiedOn DateTime NOT NULL
+	CONSTRAINT PK_FileCategory
+        PRIMARY KEY NONCLUSTERED (Id)
+);
+Go
+
+Create Table Documents.TemplateExtension(
+	Id INT NOT NULL IDENTITY(1,1),
+	Name NVARCHAR(100) NOT NULL,
+	TemplateExtensionEnum INT NOT NULL,
+	IsActive BIT NOT NULL,
+	CreatedOn DateTime NOT NULL,
+	ModifiedOn DateTime NOT NULL
+	CONSTRAINT PK_TemplateExtension
+        PRIMARY KEY NONCLUSTERED (Id)
+);
+Go
+
+Create Table Documents.FileStorage(
+	Id BIGINT NOT NULL IDENTITY(1,1),
+	Name NVARCHAR(100) NOT NULL,
+	FileExtension NVARCHAR(10) NOT NULL,
+	StorageUrl NVARCHAR(250) NOT NULL,
+	Size BIGINT NOT NULL,
+	FileCategoryId INT NOT NULL,
+	Support BIT NOT NULL,
+	TemplateName NVARCHAR(100) NULL,
+	TemplateExtensionId INT NULL,
+	IsActive BIT NOT NULL,
+	CreatedOn DateTime NOT NULL,
+	ModifiedOn DateTime NOT NULL
+	CONSTRAINT PK_FileStorage
+        PRIMARY KEY NONCLUSTERED (Id),
+    CONSTRAINT FK_FileStorage_FileCategory FOREIGN KEY (FileCategoryId)
+        REFERENCES Documents.FileCategory(Id),
+	CONSTRAINT FK_FileStorage_TemplateExtension FOREIGN KEY (TemplateExtensionId)
+        REFERENCES Documents.TemplateExtension(Id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
 

@@ -24,6 +24,7 @@ public struct ApiStatusCodes
     public const short RECORD_DELETED_SUCCESSFULLY = 203;
     public const short RECORD_FETCHED_SUCCESSFULLY = 204;
     public const short FILE_SAVED_SUCCESSFULLY = 205;
+    public const short SUCCESS = 206;
 }
 
 public struct ApiResponseMessages
@@ -157,6 +158,7 @@ public struct MimeTypes
     public const string OCTET = "application/octet-stream";
     public const string PDF = "application/pdf";
     public const string EXCEL = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    public const string WORD = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
     public const string XML = "application/xml";
 }
 

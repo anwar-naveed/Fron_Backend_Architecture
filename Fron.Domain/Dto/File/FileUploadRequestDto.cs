@@ -1,10 +1,12 @@
-﻿using Fron.Domain.Constants;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace Fron.Domain.Dto.File;
 public sealed record FileUploadRequestDto(
+    Fron.Domain.Constants.FileCategory Category,
+    bool UploadOnBlobStorage,
     IFormFile? FormFile,
-    FileCategory Category,
-    TemplateExtension? TemplateExtension = null
+    Fron.Domain.Constants.TemplateExtension? TemplateExtension = null,
+    string? TemplateNameWithExtension = null,
+    bool? Support = null
 );
 

@@ -151,7 +151,7 @@ public class RoleService : IRoleService
             data.Item2.Position = 0; //stream recieved
             string excelName = $"{FileNames.ROLES_UPLOAD_ERROR}-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}{FileExtensions.EXCEL}";
 
-            var formFile = _documentService.CreateFormFileFromFile(data.Item2, MimeTypes.EXCEL, excelName);
+            var formFile = await _documentService.CreateFormFileFromFile(data.Item2, MimeTypes.EXCEL, excelName);
 
             RolesUploadResponseDto responseDto = new RolesUploadResponseDto(excelName, formFile, MimeTypes.EXCEL);
 

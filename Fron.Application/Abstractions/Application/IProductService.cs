@@ -4,5 +4,5 @@ using Fron.Domain.GenericResponse;
 namespace Fron.Application.Abstractions.Application;
 public interface IProductService
 {
-    Task<GenericResponse<ProductFileResponseDto>> GetProductPdfByIdAsync(int Id);
+    Task<GenericResponse<GetProductResponseDto>> GetProductByIdAsync(int Id);
 }
