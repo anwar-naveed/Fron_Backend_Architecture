@@ -164,7 +164,7 @@ public struct MimeTypes
 
 public struct BlobContainerNames
 {
-    public const string DOCUMENTS_CONTAINER = "Fron";
+    public const string DOCUMENTS_CONTAINER = "fron";
 }
 
 public enum EmailType
