@@ -73,9 +73,16 @@ public static class Helper
 
     public static dynamic? GetObjectFromString(string? jsonString)
     {
-        if (!string.IsNullOrEmpty(jsonString))
-            return JsonConvert.DeserializeObject<dynamic>(jsonString);
-        else
-            return null;
+        try
+        {
+            if (!string.IsNullOrEmpty(jsonString))
+                return JsonConvert.DeserializeObject<dynamic>(jsonString);
+            else
+                return null;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Please check the json string is in correct format: {ex.Message}");
+        }
     }
 }
