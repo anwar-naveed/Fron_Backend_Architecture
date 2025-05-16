@@ -47,6 +47,11 @@ public class FileService : IFileService
             return GenericResponse<FileUploadResponseDto>.Failure(ApiResponseMessages.FILE_NOT_FOUND, ApiStatusCodes.FILE_NOT_FOUND);
         }
 
+        if (!requestDto.UploadOnBlobStorage && !requestDto.SaveInApplicationDirectory)
+        {
+            return GenericResponse<FileUploadResponseDto>.Failure(ApiResponseMessages.WRONG_PROPRTY_VALUE, ApiStatusCodes.FAILED);
+        }
+
         if (!Enum.IsDefined(typeof(FileCategory), requestDto.Category))
         {
             return GenericResponse<FileUploadResponseDto>.Failure(ApiResponseMessages.INVALID_PROPERTY_FOUND, ApiStatusCodes.INVALID_PROPERTY_FOUND);
@@ -124,7 +129,10 @@ public class FileService : IFileService
         }
 
         //Saving of file in application directory
-        await _documentService.CreateFileFromFormFileAsync(requestDto.FormFile, filePath);
+        if (requestDto.SaveInApplicationDirectory)
+        {
+            await _documentService.CreateFileFromFormFileAsync(requestDto.FormFile, filePath);
+        }
 
         string name = _documentService.GetFileNameWithoutExtension(blobName);
         string extension = _documentService.GetFileExtension(blobName);

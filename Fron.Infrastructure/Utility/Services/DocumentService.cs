@@ -221,8 +221,7 @@ public class DocumentService : IDocumentService
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"An error occurred while creating the FormFile: {ex.Message}");
-            return null;
+            throw new Exception($"An error occurred while creating the form file from file: {ex.Message}");
         }
     }
 
@@ -241,8 +240,7 @@ public class DocumentService : IDocumentService
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"An error occurred while creating the FormFile: {ex.Message}");
-            return null;
+            throw new Exception($"An error occurred while creating the form file from file: {ex.Message}");
         }
     }
 
@@ -255,22 +253,36 @@ public class DocumentService : IDocumentService
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"An error occurred while creating the file: {ex.Message}");
+            throw new Exception($"An error occurred while creating the file from form file: {ex.Message}");
         }
     }
 
     public async Task CopyToFile(Stream stream, string path)
     {
-        using var fileStream = File.Create(path);
-        //stream.Position = 0;
-        stream.CopyTo(fileStream);
-        await Task.CompletedTask;
+        try
+        {
+            using var fileStream = File.Create(path);
+            //stream.Position = 0;
+            stream.CopyTo(fileStream);
+            await Task.CompletedTask;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"An error occurred while creating the file: {ex.Message}"); ;
+        }
     }
 
     public async Task<Stream> GetFileStreamAsync(string path)
     {
-        FileInfo fileInfo = new FileInfo(path);
-        return await Task.FromResult(fileInfo.OpenRead());
+        try
+        {
+            FileInfo fileInfo = new FileInfo(path);
+            return await Task.FromResult(fileInfo.OpenRead());
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"An error occurred while creating the stream from file: {ex.Message}");
+        }
     }
 
     public string GetFileNameFromPath(string filePath)

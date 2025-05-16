@@ -50,6 +50,7 @@ public struct ApiResponseMessages
     public const string RECORD_CANNOT_BE_UPDATED = "Record cannot be updated.";
     public const string TEMPLATE_NOT_FOUND = "Template not found.";
     public const string INVALID_PROPERTY_FOUND = "Invalid property found.";
+    public const string WRONG_PROPRTY_VALUE = "Wrong property value provided";
 }
 
 public struct StoreProcedureNames
