@@ -28,9 +28,9 @@ public class AuthService : IAuthService
 
     public async Task<GenericResponse<LoginResponseDto>> LoginAsync(LoginRequestDto requestDto)
     {
-        var encryptedPassword = Helper.Encrypt(requestDto.Password, _encryptionConfiguration.Key);
+        var encryptedPassword = Helper.Encrypt(Helper.Base64Decode(requestDto.Password), _encryptionConfiguration.Key);
 
-        var user = await _userRepository.GetUserAsync(requestDto.UserName, encryptedPassword);
+        var user = await _userRepository.GetUserAsync(Helper.Base64Decode(requestDto.UserName), encryptedPassword);
 
         if (user is null)
         {

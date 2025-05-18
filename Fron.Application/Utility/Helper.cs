@@ -29,6 +29,68 @@ public static class Helper
         return Encoding.ASCII.GetString(_des.CreateDecryptor().TransformFinalBlock(Buffer, 0, Buffer.Length));
     }
 
+    public static string Base64Encode(string plainText)
+    {
+        byte[] bytes = Encoding.UTF8.GetBytes(plainText);
+        return Convert.ToBase64String(bytes);
+    }
+    public static string Base64Encode(byte[] bytes)
+    {
+        return Convert.ToBase64String(bytes);
+    }
+    public static string Base64Encode(byte[] bytes, int offset, int length)
+    {
+        return Convert.ToBase64String(bytes, offset, length);
+    }
+    public static string Base64Encode(string plainText, int offset, int length)
+    {
+        byte[] bytes = Encoding.UTF8.GetBytes(plainText);
+        return Convert.ToBase64String(bytes, offset, length);
+    }
+    public static string Base64Encode(byte[] bytes, int offset, int length, Base64FormattingOptions options)
+    {
+        return Convert.ToBase64String(bytes, offset, length, options);
+    }
+    public static string Base64Encode(string plainText, int offset, int length, Base64FormattingOptions options)
+    {
+        byte[] bytes = Encoding.UTF8.GetBytes(plainText);
+        return Convert.ToBase64String(bytes, offset, length, options);
+    }
+    public static string Base64Decode(byte[] bytes)
+    {
+        return Encoding.UTF8.GetString(bytes);
+    }
+    public static string Base64Decode(byte[] bytes, int offset, int length)
+    {
+        return Encoding.UTF8.GetString(bytes, offset, length);
+    }
+    public static string Base64Decode(string base64EncodedData, int offset, int length)
+    {
+        byte[] bytes = Convert.FromBase64String(base64EncodedData);
+        return Encoding.UTF8.GetString(bytes, offset, length);
+    }
+    public static string Base64Decode(string base64EncodedData, int offset, int length, Base64FormattingOptions options, Encoding encoding)
+    {
+        byte[] bytes = Convert.FromBase64String(base64EncodedData);
+        return encoding.GetString(bytes, offset, length);
+    }
+    public static string Base64Decode(string base64EncodedData, Encoding encoding)
+    {
+        byte[] bytes = Convert.FromBase64String(base64EncodedData);
+        return encoding.GetString(bytes);
+    }
+    public static string Base64Decode(string base64EncodedData, int offset, int length, Encoding encoding)
+    {
+        byte[] bytes = Convert.FromBase64String(base64EncodedData);
+        return encoding.GetString(bytes, offset, length);
+    }
+
+    public static string Base64Decode(string base64EncodedData)
+    {
+        byte[] bytes = Convert.FromBase64String(base64EncodedData);
+        return Encoding.UTF8.GetString(bytes);
+    }
+
     public static byte[] MD5Hash(string value)
     {
         return _md5.ComputeHash(Encoding.ASCII.GetBytes(value));
