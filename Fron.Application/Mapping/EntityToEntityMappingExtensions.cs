@@ -1,4 +1,5 @@
-﻿using Fron.Domain.AuthEntities;
+﻿using Fron.Application.Utility;
+using Fron.Domain.AuthEntities;
 using Fron.Domain.Dto.Role;
 using Fron.Domain.Dto.User;
 
@@ -12,11 +13,11 @@ public static class EntityToEntityMappingExtensions
         entity.ModifiedOn = DateTime.UtcNow;
     }
 
-    public static void Map(this User entity, UpdateUserRequestDto requestDto, string password)
+    public static void Map(this User entity, UpdateUserRequestDto requestDto, string key)
     {
-        entity.Name = requestDto.Name;
-        entity.Username = requestDto.Username;
-        entity.Password = password;
+        entity.Name = Helper.Base64Decode(requestDto.Name);
+        entity.Username = Helper.Base64Decode(requestDto.Username);
+        entity.Password = Helper.Encrypt(Helper.Base64Decode(requestDto.Password), key);
         entity.IsActive = requestDto.IsActive;
         entity.ModifiedOn = DateTime.UtcNow;
     }

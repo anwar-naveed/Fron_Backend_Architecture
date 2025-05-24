@@ -1,4 +1,5 @@
 ﻿using Fron.Application.Abstractions.Persistence;
+using Fron.Application.Utility;
 using Fron.Domain.AuthEntities;
 using Fron.Domain.Dto.User;
 using Fron.Infrastructure.Persistence.Contexts;
@@ -27,6 +28,21 @@ public class UserRepository : AuthRepository, IUserRepository
         return userRole.Entity.User;
     }
 
+    public async Task<User> AddUserRoleAsync(User us, Role role)
+    {
+
+        var entity = new UserRole();
+        entity.User = us;
+        entity.Role = role;
+        entity.ModifiedDate = DateTime.UtcNow;
+
+        var userRole = await _authContext.UserRoles.AddAsync(entity);
+
+        await _authContext.SaveChangesAsync();
+
+        return userRole.Entity.User;
+    }
+
     public async Task<User> UpdateUserAsync(User entity)
     {
         var user = _authContext.User.Update(entity);
@@ -38,6 +54,8 @@ public class UserRepository : AuthRepository, IUserRepository
     {
         return await _authContext.User
             .Where(e => e.Id == id && e.IsActive == true)
+            .Include(x => x.UserRoles)
+            .ThenInclude(x => x.Role)
             .FirstOrDefaultAsync();
     }
 
@@ -51,6 +69,8 @@ public class UserRepository : AuthRepository, IUserRepository
         => await _authContext.User
         .Where(e => e.Username == userName &&
         e.Password == password && e.IsActive == true)
+        .Include(x => x.UserRoles)
+        .ThenInclude(x => x.Role)
         .FirstOrDefaultAsync();
 
     public async Task<IEnumerable<GetAllUsersResponseDto>> GetAllUsersAsync()
@@ -59,8 +79,8 @@ public class UserRepository : AuthRepository, IUserRepository
             .Where(x => x.IsActive == true)
             .Select(x => new GetAllUsersResponseDto(
                 x.Id,
-                x.Name,
-                x.Username,
+                Helper.Base64Encode(x.Name!),
+                Helper.Base64Encode(x.Username!),
                 x.IsActive,
                 x.CreatedOn,
                 x.ModifiedOn))

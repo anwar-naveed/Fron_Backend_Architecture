@@ -43,10 +43,8 @@ public class UserService : IUserService
             }
             else
             {
-                string password = Helper.Encrypt(request.Password, _encryptionConfiguration.Key);
-
                 return GenericResponse<UserRegistrationResponseDto>.Success(
-                (await _userRepository.CreateUserAsync(request.Map(password), role)).Map(),
+                (await _userRepository.CreateUserAsync(request.Map(_encryptionConfiguration.Key), role)).Map(),
                 ApiResponseMessages.RECORD_SAVED_SUCCESSFULLY,
                 ApiStatusCodes.RECORD_SAVED_SUCCESSFULLY);
             }
@@ -109,9 +107,7 @@ public class UserService : IUserService
                 }
                 else
                 {
-                    string password = Helper.Encrypt(request.Password, _encryptionConfiguration.Key);
-
-                    entity.Map(request, password);
+                    entity.Map(request, _encryptionConfiguration.Key);
 
                     var updatedEntity = await _userRepository.UpdateUserAsync(entity);
 
@@ -126,7 +122,7 @@ public class UserService : IUserService
         }
     }
 
-    public async Task<GenericResponse> DeleteUserAsync(long Id)
+    public async Task<GenericResponse> DeleteUserPermAsync(long Id)
     {
         var entity = await _userRepository.GetByIdAsync(Id);
 
@@ -138,6 +134,62 @@ public class UserService : IUserService
         {
             await _userRepository.DeleteUserAsync(entity);
             return GenericResponse.Success(ApiResponseMessages.RECORD_DELETED_SUCCESSFULLY, ApiStatusCodes.RECORD_DELETED_SUCCESSFULLY);
+        }
+    }
+
+    public async Task<GenericResponse> DeleteUserAsync(long Id)
+    {
+        var entity = await _userRepository.GetByIdAsync(Id);
+
+        if (entity == null)
+        {
+            return GenericResponse.Failure(ApiResponseMessages.RECORD_NOT_FOUND, ApiStatusCodes.RECORD_NOT_FOUND);
+        }
+        else
+        {
+            entity.IsActive = false;
+            await _userRepository.UpdateUserAsync(entity);
+            return GenericResponse.Success(ApiResponseMessages.RECORD_DELETED_SUCCESSFULLY, ApiStatusCodes.RECORD_DELETED_SUCCESSFULLY);
+        }
+    }
+
+    public async Task<GenericResponse<UserRegistrationResponseDto>> AddUserRoleAsync(CreateUserRoleRequestDto request)
+    {
+        if (request == null)
+        {
+            return GenericResponse<UserRegistrationResponseDto>.Failure(ApiResponseMessages.INVALID_RECORD, ApiStatusCodes.FAILED);
+        }
+        else
+        {
+            var role = await _roleRepository.GetByIdAsync(request.RoleId);
+
+            if (role == null)
+            {
+                return GenericResponse<UserRegistrationResponseDto>.Failure(ApiResponseMessages.INVALID_ROLE, ApiStatusCodes.FAILED);
+            }
+            else
+            {
+                var user = await _userRepository.GetByIdAsync(request.UserId);
+
+                if (user == null)
+                {
+                    return GenericResponse<UserRegistrationResponseDto>.Failure(ApiResponseMessages.INVALID_USER, ApiStatusCodes.FAILED);
+                }
+
+                if (user.UserRoles != null && user.UserRoles.Count > 0 && user.UserRoles.Any(x => x.RoleId == role.Id))
+                {
+                    return GenericResponse<UserRegistrationResponseDto>.Failure(ApiResponseMessages.RECORD_ALREADY_EXIST, ApiStatusCodes.RECORD_ALREADY_EXIST);
+                }
+                else
+                {
+
+
+                    return GenericResponse<UserRegistrationResponseDto>.Success(
+                    (await _userRepository.AddUserRoleAsync(user, role)).Map(),
+                    ApiResponseMessages.RECORD_SAVED_SUCCESSFULLY,
+                    ApiStatusCodes.RECORD_SAVED_SUCCESSFULLY);
+                }
+            }
         }
     }
 }
