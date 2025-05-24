@@ -1,6 +1,8 @@
-﻿namespace Fron.Application.Abstractions.Identity;
+﻿using Fron.Domain.AuthEntities;
+
+namespace Fron.Application.Abstractions.Identity;
 
 public interface ITokenService
 {
-    string GenerateToken(string? userName);
+    string GenerateToken(User user);
 }

@@ -1,4 +1,5 @@
-﻿using Fron.Domain.AuthEntities;
+﻿using Fron.Application.Utility;
+using Fron.Domain.AuthEntities;
 using Fron.Domain.Constants;
 using Fron.Domain.Dto.FileCategory;
 using Fron.Domain.Dto.FileStorage;
@@ -140,8 +141,8 @@ public static class EntityToDtoMappingExtensions
         }
         else return new GetUserResponseDto(
             user.Id,
-            user.Name!,
-            user.Username!,
+            Helper.Base64Encode(user.Name!),
+            Helper.Base64Encode(user.Username!),
             user.IsActive,
             user.CreatedOn,
             user.ModifiedOn);
@@ -161,8 +162,8 @@ public static class EntityToDtoMappingExtensions
         }
         else return new UpdateUserResponseDto(
             user.Id,
-            user.Name!,
-            user.Username!,
+            Helper.Base64Encode(user.Name!),
+            Helper.Base64Encode(user.Username!),
             user.IsActive,
             user.CreatedOn,
             user.ModifiedOn);

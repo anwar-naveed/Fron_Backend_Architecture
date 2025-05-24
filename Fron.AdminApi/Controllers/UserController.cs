@@ -27,6 +27,10 @@ public class UserController : BaseApiController
     public async Task<IActionResult> DeleteUserAsync(long Id)
         => Ok(await _userService.DeleteUserAsync(Id));
 
+    [HttpDelete("User-Delete-Perm")]
+    public async Task<IActionResult> DeleteUserPermAsync(long Id)
+        => Ok(await _userService.DeleteUserPermAsync(Id));
+
     [HttpGet("Get-All-Users")]
     public async Task<IActionResult> GetAllUsersAsync()
         => Ok(await _userService.GetAllUsersAsync());
@@ -34,4 +38,8 @@ public class UserController : BaseApiController
     [HttpGet("Get-User")]
     public async Task<IActionResult> GetUserByIdAsync(long Id)
         => Ok(await _userService.GetUserByIdAsync(Id));
+
+    [HttpPost("User-Role-Add")]
+    public async Task<IActionResult> AddUserRole([FromBody] CreateUserRoleRequestDto requestDto)
+        => Ok(await _userService.AddUserRoleAsync(requestDto));
 }

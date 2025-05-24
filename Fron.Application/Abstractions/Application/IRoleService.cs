@@ -9,6 +9,7 @@ public interface IRoleService
     Task<GenericResponse<IEnumerable<GetAllRolesResponseDto>>> GetAllRolesAsync();
     Task<GenericResponse<GetRoleResponseDto>> GetRoleByIdAsync(long Id);
     Task<GenericResponse<UpdateRoleResponseDto>> UpdateRoleAsync(UpdateRoleRequestDto requestDto);
+    Task<GenericResponse> DeleteRolePermAsync(long Id);
     Task<GenericResponse> DeleteRoleAsync(long Id);
     Task<GenericResponse<RolesUploadResponseDto>> BulkInsertRolesAsync(IFormFile file);
 }

@@ -36,6 +36,7 @@ public struct ApiResponseMessages
     public const string SOMETHING_WENT_WRONG = "Something went wrong.";
     public const string INVALID_USERNAME_PASSWORD = "Invalid username or password.";
     public const string INVALID_ROLE = "Invalid role.";
+    public const string INVALID_USER = "Invalid user.";
     public const string INVALID_RECORD = "Invalid record.";
     public const string USER_LOGIN_SUCCESSFULLY = "User login successfully.";
     public const string RECORD_NOT_FOUND = "Record not found.";
@@ -111,6 +112,7 @@ public struct JwtClaimNames
     public const string JTI = "JWT ID";
     public const string IAT = "Issued At";
     public const string COMPANY_ID = "CompanyId";
+    public const string ROLES = "Roles";
 }
 
 public struct FileExtensions

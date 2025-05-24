@@ -118,7 +118,7 @@ public class RoleService : IRoleService
         }
     }
 
-    public async Task<GenericResponse> DeleteRoleAsync(long Id)
+    public async Task<GenericResponse> DeleteRolePermAsync(long Id)
     {
         var entity = await _roleRepository.GetByIdAsync(Id);
 
@@ -129,6 +129,22 @@ public class RoleService : IRoleService
         else
         {
             await _roleRepository.DeleteRoleAsync(entity);
+            return GenericResponse.Success(ApiResponseMessages.RECORD_DELETED_SUCCESSFULLY, ApiStatusCodes.RECORD_DELETED_SUCCESSFULLY);
+        }
+    }
+
+    public async Task<GenericResponse> DeleteRoleAsync(long Id)
+    {
+        var entity = await _roleRepository.GetByIdAsync(Id);
+
+        if (entity == null)
+        {
+            return GenericResponse.Failure(ApiResponseMessages.RECORD_NOT_FOUND, ApiStatusCodes.RECORD_NOT_FOUND);
+        }
+        else
+        {
+            entity.IsActive = false;
+            await _roleRepository.UpdateRoleAsync(entity);
             return GenericResponse.Success(ApiResponseMessages.RECORD_DELETED_SUCCESSFULLY, ApiStatusCodes.RECORD_DELETED_SUCCESSFULLY);
         }
     }

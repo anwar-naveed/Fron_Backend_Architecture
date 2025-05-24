@@ -32,6 +32,10 @@ public class RoleController : BaseApiController
     public async Task<IActionResult> DeleteRoleAsync(long Id)
         => Ok(await _roleService.DeleteRoleAsync(Id));
 
+    [HttpDelete("Role-Delete-Perm")]
+    public async Task<IActionResult> DeleteRolePermAsync(long Id)
+        => Ok(await _roleService.DeleteRolePermAsync(Id));
+
     [HttpGet("Get-All-Roles")]
     public async Task<IActionResult> GetAllRolesAsync()
         => Ok(await _roleService.GetAllRolesAsync());

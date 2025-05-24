@@ -37,7 +37,7 @@ public class AuthService : IAuthService
             return GenericResponse<LoginResponseDto>.Failure(ApiResponseMessages.INVALID_USERNAME_PASSWORD, ApiStatusCodes.INVALID_USERNAME_PASSWORD);
         }
 
-        var token = _tokenService.GenerateToken(user.Username);
+        var token = _tokenService.GenerateToken(user);
 
         var response = user.Map(token);
 

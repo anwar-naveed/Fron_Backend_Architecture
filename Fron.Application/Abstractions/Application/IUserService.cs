@@ -9,5 +9,7 @@ public interface IUserService
     Task<GenericResponse<IEnumerable<GetAllUsersResponseDto>>> GetAllUsersAsync();
     Task<GenericResponse<GetUserResponseDto>> GetUserByIdAsync(long Id);
     Task<GenericResponse<UpdateUserResponseDto>> UpdateUserAsync(UpdateUserRequestDto request);
+    Task<GenericResponse> DeleteUserPermAsync(long Id);
     Task<GenericResponse> DeleteUserAsync(long Id);
+    Task<GenericResponse<UserRegistrationResponseDto>> AddUserRoleAsync(CreateUserRoleRequestDto request);
 }

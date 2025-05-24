@@ -1,4 +1,5 @@
-﻿using Fron.Domain.AuthEntities;
+﻿using Fron.Application.Utility;
+using Fron.Domain.AuthEntities;
 using Fron.Domain.Dto.FileCategory;
 using Fron.Domain.Dto.FileStorage;
 using Fron.Domain.Dto.Login;
@@ -20,14 +21,14 @@ public static class DtoToEntityMappingExtensions
         };
     }
 
-    public static User Map(this UserRegistrationRequestDto requestDto, string password)
+    public static User Map(this UserRegistrationRequestDto requestDto, string key)
     {
         if (requestDto == null) { return new User(); }
         else return new User
         {
-            Name = requestDto.Name,
-            Username = requestDto.UserName,
-            Password = password,
+            Name = Helper.Base64Decode(requestDto.Name),
+            Username = Helper.Base64Decode(requestDto.UserName),
+            Password = Helper.Encrypt(Helper.Base64Decode(requestDto.Password), key),
             IsActive = true,
             CreatedOn = DateTime.UtcNow,
             ModifiedOn = DateTime.UtcNow
