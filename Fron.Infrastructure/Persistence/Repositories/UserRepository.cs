@@ -1,6 +1,7 @@
 ﻿using Fron.Application.Abstractions.Persistence;
 using Fron.Application.Utility;
 using Fron.Domain.AuthEntities;
+using Fron.Domain.Dto.Role;
 using Fron.Domain.Dto.User;
 using Fron.Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
@@ -77,11 +78,20 @@ public class UserRepository : AuthRepository, IUserRepository
     {
         return await _authContext.User
             .Where(x => x.IsActive == true)
+            .Include(x => x.UserRoles)
+            .ThenInclude(x => x.Role)
             .Select(x => new GetAllUsersResponseDto(
                 x.Id,
                 Helper.Base64Encode(x.Name!),
                 Helper.Base64Encode(x.Username!),
                 x.IsActive,
+                x.UserRoles != null && x.UserRoles.Count > 0 ? x.UserRoles.Select(x => new GetAllRolesResponseDto(
+                    x.Role.Id,
+                    x.Role.Name!,
+                    x.Role.IsActive,
+                    x.Role.CreatedOn,
+                    x.Role.ModifiedOn
+                    )).ToList() : null,
                 x.CreatedOn,
                 x.ModifiedOn))
             .AsNoTracking()
