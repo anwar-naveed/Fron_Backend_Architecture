@@ -30,6 +30,7 @@ public class RoleRepository : AuthRepository, IRoleRepository
     {
         return await _authContext.Role
             .Where(e => e.Id == id && e.IsActive == true)
+            .Include(x => x.UserRoles)
             .FirstOrDefaultAsync();
     }
 

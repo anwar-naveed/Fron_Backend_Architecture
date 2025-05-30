@@ -128,8 +128,15 @@ public class RoleService : IRoleService
         }
         else
         {
-            await _roleRepository.DeleteRoleAsync(entity);
-            return GenericResponse.Success(ApiResponseMessages.RECORD_DELETED_SUCCESSFULLY, ApiStatusCodes.RECORD_DELETED_SUCCESSFULLY);
+            if (entity.UserRoles != null && entity.UserRoles.Count > 0 && entity.UserRoles.Any(x => x.IsActive == true))
+            {
+                return GenericResponse.Failure(ApiResponseMessages.USERROLEDELETEFIRST, ApiStatusCodes.USERROLEDELETEFIRST);
+            }
+            else
+            {
+                await _roleRepository.DeleteRoleAsync(entity);
+                return GenericResponse.Success(ApiResponseMessages.RECORD_DELETED_SUCCESSFULLY, ApiStatusCodes.RECORD_DELETED_SUCCESSFULLY); 
+            }
         }
     }
 
@@ -143,9 +150,17 @@ public class RoleService : IRoleService
         }
         else
         {
-            entity.IsActive = false;
-            await _roleRepository.UpdateRoleAsync(entity);
-            return GenericResponse.Success(ApiResponseMessages.RECORD_DELETED_SUCCESSFULLY, ApiStatusCodes.RECORD_DELETED_SUCCESSFULLY);
+            if (entity.UserRoles != null && entity.UserRoles.Count > 0 && entity.UserRoles.Any(x => x.IsActive == true))
+            {
+                return GenericResponse.Failure(ApiResponseMessages.USERROLEDELETEFIRST, ApiStatusCodes.USERROLEDELETEFIRST);
+            }
+            else
+            {
+                entity.IsActive = false;
+                entity.ModifiedOn = DateTime.UtcNow;
+                await _roleRepository.UpdateRoleAsync(entity);
+                return GenericResponse.Success(ApiResponseMessages.RECORD_DELETED_SUCCESSFULLY, ApiStatusCodes.RECORD_DELETED_SUCCESSFULLY);
+            }
         }
     }
 

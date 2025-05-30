@@ -35,12 +35,13 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApiV7 v1"));
 }
 
+app.UseCors("AllowAllOrigins");
+//app.UseMiddleware<HeadersHandlingMiddleware>();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowAllOrigins");
-
+//app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
