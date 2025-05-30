@@ -1,13 +1,17 @@
-﻿using Fron.Application.Abstractions.Application;
+﻿using Azure.Core;
+using Fron.Application.Abstractions.Application;
 using Fron.Application.Abstractions.Persistence;
 using Fron.Application.Mapping;
 using Fron.Application.Utility;
+using Fron.Domain.AuthEntities;
 using Fron.Domain.Configuration;
 using Fron.Domain.Constants;
 using Fron.Domain.Dto.User;
 using Fron.Domain.Dto.UserRegistration;
 using Fron.Domain.GenericResponse;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using System.Data;
 using System.Transactions;
 
 namespace Fron.Application.Services;
@@ -117,7 +121,7 @@ public class UserService : IUserService
                         updatedEntity.MapUpdate(),
                         ApiResponseMessages.RECORD_UPDATED_SUCCESSFULLY,
                         ApiStatusCodes.RECORD_UPDATED_SUCCESSFULLY);
-                } 
+                }
             }
         }
     }
@@ -147,7 +151,26 @@ public class UserService : IUserService
         }
         else
         {
+            if (entity.UserRoles != null && entity.UserRoles.Count > 0 && entity.UserRoles.Any(x => x.IsActive == true))
+            {
+                ParallelOptions parallelOptions = new()
+                {
+                    MaxDegreeOfParallelism = 4
+                };
+
+                await Parallel.ForEachAsync(entity.UserRoles, parallelOptions, async (userRole, token) =>
+                {
+                    if (userRole.IsActive == true)
+                    {
+                        userRole.IsActive = false;
+                        userRole.ModifiedDate = DateTime.UtcNow;
+                        await Task.CompletedTask;
+                    }
+                });
+            }
+
             entity.IsActive = false;
+            entity.ModifiedOn = DateTime.UtcNow;
             await _userRepository.UpdateUserAsync(entity);
             return GenericResponse.Success(ApiResponseMessages.RECORD_DELETED_SUCCESSFULLY, ApiStatusCodes.RECORD_DELETED_SUCCESSFULLY);
         }
@@ -155,6 +178,7 @@ public class UserService : IUserService
 
     public async Task<GenericResponse<UserRegistrationResponseDto>> AddUserRoleAsync(CreateUserRoleRequestDto request)
     {
+
         if (request == null)
         {
             return GenericResponse<UserRegistrationResponseDto>.Failure(ApiResponseMessages.INVALID_RECORD, ApiStatusCodes.FAILED);
@@ -176,19 +200,77 @@ public class UserService : IUserService
                     return GenericResponse<UserRegistrationResponseDto>.Failure(ApiResponseMessages.INVALID_USER, ApiStatusCodes.FAILED);
                 }
 
-                if (user.UserRoles != null && user.UserRoles.Count > 0 && user.UserRoles.Any(x => x.RoleId == role.Id))
+                if (user.UserRoles != null && user.UserRoles.Count > 0 && user.UserRoles.Any(x => x.IsActive == true && x.RoleId == role.Id))
                 {
                     return GenericResponse<UserRegistrationResponseDto>.Failure(ApiResponseMessages.RECORD_ALREADY_EXIST, ApiStatusCodes.RECORD_ALREADY_EXIST);
                 }
                 else
                 {
+                    if (user.UserRoles != null && user.UserRoles.Count > 0 && user.UserRoles.Any(x => x.RoleId == role.Id))
+                    {
 
+                        ParallelOptions parallelOptions = new()
+                        {
+                            MaxDegreeOfParallelism = 4
+                        };
 
-                    return GenericResponse<UserRegistrationResponseDto>.Success(
-                    (await _userRepository.AddUserRoleAsync(user, role)).Map(),
-                    ApiResponseMessages.RECORD_SAVED_SUCCESSFULLY,
-                    ApiStatusCodes.RECORD_SAVED_SUCCESSFULLY);
+                        await Parallel.ForEachAsync(user.UserRoles.Where(x => x.RoleId == role.Id), parallelOptions, async (userRole, token) =>
+                        {
+                            userRole.IsActive = true;
+                            userRole.ModifiedDate = DateTime.UtcNow;
+                            await Task.CompletedTask;
+                        });
+
+                        return GenericResponse<UserRegistrationResponseDto>.Success(
+                            (await _userRepository.UpdateUserAsync(user)).Map(),
+                            ApiResponseMessages.RECORD_SAVED_SUCCESSFULLY,
+                            ApiStatusCodes.RECORD_SAVED_SUCCESSFULLY);
+                    }
+                    else
+                    {
+                        return GenericResponse<UserRegistrationResponseDto>.Success(
+                                (await _userRepository.AddUserRoleAsync(user, role)).Map(),
+                                ApiResponseMessages.RECORD_SAVED_SUCCESSFULLY,
+                                ApiStatusCodes.RECORD_SAVED_SUCCESSFULLY); 
+                    }
                 }
+            }
+        }
+    }
+
+    public async Task<GenericResponse> DeleteUserRolesAsync(DeleteUserRoleRequestDto request)
+    {
+        var entity = await _userRepository.GetByIdAsync(request.UserId);
+
+        if (entity == null)
+        {
+            return GenericResponse.Failure(ApiResponseMessages.RECORD_NOT_FOUND, ApiStatusCodes.RECORD_NOT_FOUND);
+        }
+        else
+        {
+            if (entity.UserRoles == null || entity.UserRoles.Count < 1)
+            {
+                return GenericResponse.Failure(ApiResponseMessages.RECORD_NOT_FOUND, ApiStatusCodes.RECORD_NOT_FOUND);
+            }
+            else
+            {
+                ParallelOptions parallelOptions = new()
+                {
+                    MaxDegreeOfParallelism = 4
+                };
+
+                await Parallel.ForEachAsync(entity.UserRoles, parallelOptions, async (userRole, token) =>
+                {
+                    if (userRole.IsActive == true && request.RoleId.Contains(userRole.RoleId))
+                    {
+                        userRole.IsActive = false;
+                        userRole.ModifiedDate = DateTime.UtcNow;
+                        await Task.CompletedTask;
+                    }
+                });
+
+                await _userRepository.UpdateUserAsync(entity);
+                return GenericResponse.Success(ApiResponseMessages.RECORD_DELETED_SUCCESSFULLY, ApiStatusCodes.RECORD_DELETED_SUCCESSFULLY); 
             }
         }
     }

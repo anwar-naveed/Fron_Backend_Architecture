@@ -12,4 +12,5 @@ public interface IUserService
     Task<GenericResponse> DeleteUserPermAsync(long Id);
     Task<GenericResponse> DeleteUserAsync(long Id);
     Task<GenericResponse<UserRegistrationResponseDto>> AddUserRoleAsync(CreateUserRoleRequestDto request);
+    Task<GenericResponse> DeleteUserRolesAsync(DeleteUserRoleRequestDto request);
 }

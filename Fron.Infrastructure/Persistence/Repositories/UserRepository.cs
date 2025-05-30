@@ -21,6 +21,7 @@ public class UserRepository : AuthRepository, IUserRepository
         entity.User = us;
         entity.Role = role;
         entity.ModifiedDate = DateTime.UtcNow;
+        entity.IsActive = true;
 
         var userRole =  await _authContext.UserRoles.AddAsync(entity);
 
@@ -36,6 +37,7 @@ public class UserRepository : AuthRepository, IUserRepository
         entity.User = us;
         entity.Role = role;
         entity.ModifiedDate = DateTime.UtcNow;
+        entity.IsActive = true;
 
         var userRole = await _authContext.UserRoles.AddAsync(entity);
 
@@ -85,7 +87,7 @@ public class UserRepository : AuthRepository, IUserRepository
                 Helper.Base64Encode(x.Name!),
                 Helper.Base64Encode(x.Username!),
                 x.IsActive,
-                x.UserRoles != null && x.UserRoles.Count > 0 ? x.UserRoles.Select(x => new GetAllRolesResponseDto(
+                x.UserRoles != null && x.UserRoles.Count > 0 ? x.UserRoles.Where(x => x.IsActive == true).Select(x => new GetAllRolesResponseDto(
                     x.Role.Id,
                     x.Role.Name!,
                     x.Role.IsActive,

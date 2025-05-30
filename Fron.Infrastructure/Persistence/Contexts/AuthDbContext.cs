@@ -25,7 +25,8 @@ public partial class AuthDbContext : DbContext
     {
         modelBuilder.Entity<UserRole>(entity =>
         {
-            entity.HasKey(e => new { e.UserId, e.RoleId });
+            //entity.HasKey(e => new { e.UserId, e.RoleId });
+            entity.HasKey(e => e.Id);
         });
 
         modelBuilder.Entity<UserRole>()

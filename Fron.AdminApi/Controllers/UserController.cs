@@ -42,4 +42,8 @@ public class UserController : BaseApiController
     [HttpPost("User-Role-Add")]
     public async Task<IActionResult> AddUserRole([FromBody] CreateUserRoleRequestDto requestDto)
         => Ok(await _userService.AddUserRoleAsync(requestDto));
+
+    [HttpDelete("User-Delete-Roles")]
+    public async Task<IActionResult> DeleteUserRolesAsync([FromBody] DeleteUserRoleRequestDto requestDto)
+        => Ok(await _userService.DeleteUserRolesAsync(requestDto));
 }

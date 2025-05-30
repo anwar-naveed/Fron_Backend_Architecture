@@ -14,7 +14,8 @@ public struct ApiStatusCodes
     public const short FILE_SAVED_FAILED = 108;
     public const short RECORD_CANNOT_BE_UPDATED = 109;
     public const short TEMPLATE_NOT_FOUND = 110;
-    public const short INVALID_PROPERTY_FOUND = 120;
+    public const short INVALID_PROPERTY_FOUND = 111;
+    public const short USERROLEDELETEFIRST = 112;
 
     // 200 series for success
     public const short RECORD_SAVED_SUCCESSFULLY = 200;
@@ -52,6 +53,7 @@ public struct ApiResponseMessages
     public const string TEMPLATE_NOT_FOUND = "Template not found.";
     public const string INVALID_PROPERTY_FOUND = "Invalid property found.";
     public const string WRONG_PROPRTY_VALUE = "Wrong property value provided";
+    public const string USERROLEDELETEFIRST = "Please remove role from the active users first";
 }
 
 public struct StoreProcedureNames
