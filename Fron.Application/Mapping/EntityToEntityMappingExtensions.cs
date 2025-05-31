@@ -17,8 +17,12 @@ public static class EntityToEntityMappingExtensions
     {
         entity.Name = Helper.Base64Decode(requestDto.Name);
         entity.Username = Helper.Base64Decode(requestDto.Username);
-        entity.Password = Helper.Encrypt(Helper.Base64Decode(requestDto.Password), key);
-        //entity.IsActive = requestDto.IsActive;
         entity.ModifiedOn = DateTime.UtcNow;
+        
+        if (!string.IsNullOrEmpty(requestDto.Password))
+        {
+            entity.Password = Helper.Encrypt(Helper.Base64Decode(requestDto.Password), key); 
+        }
+        //entity.IsActive = requestDto.IsActive;
     }
 }
